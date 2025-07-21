@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import AddNote from './pages/AddNote'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <h1>this is my personal website</h1>
+      <AddNote />
     </>
   )
 }
