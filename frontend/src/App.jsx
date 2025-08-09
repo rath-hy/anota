@@ -1,5 +1,7 @@
 // import { useState } from 'react'
 import AddNote from './pages/AddNote'
+import LoginForm from './pages/LoginForm'
+import NewNoteForm from './pages/NewNoteForm'
 
 //testing ground
 import { useState, useEffect } from 'react'
@@ -16,7 +18,6 @@ const App = () => {
       })
   }, [])
 
-
   // const notes = await axios.get
 
   console.log(notes)
@@ -24,12 +25,17 @@ const App = () => {
   return (
     <>
       {/* <AddNote /> */}
-      {notes.map(note => (
+      {/* {notes.map(note => (
         <div key={note.id}>
           {note.content}
         </div>
       ))
-      }
+      } */}
+      <LoginForm />
+      <AddNote />
+      {/* <NewNoteForm/> */}
+
+
     </>
   )
 }
