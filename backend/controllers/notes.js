@@ -3,7 +3,14 @@ const { Note, User } = require('../models')
 const tokenExtractor = require('../middleware/tokenExtractor')
 
 router.get('/', async (req, res) => {
+  const where = {}
+
+  if (req.query.url) {
+    where.url = req.query.url
+  }
+
   const notes = await Note.findAll({
+    where,
     attributes: { exclude: ['userId'] },
     include: {
       model: User,

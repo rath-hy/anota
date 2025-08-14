@@ -26,5 +26,10 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
+const getByUrl = (url) => {
+  queryUrl = baseUrl + `?url=${url}`
+  const request = axios.get(queryUrl)
+  return request.then(response => response.data)
+}
 
-export default { getAll, create, update, setToken }
+export default { getAll, getByUrl, create, update, setToken }
