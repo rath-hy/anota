@@ -11,7 +11,7 @@ const LoginForm = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      console.log('parsed user is', user)
+      // console.log('parsed user is', user)
       setUser(user)
       // noteService.setToken(user.token)
     }

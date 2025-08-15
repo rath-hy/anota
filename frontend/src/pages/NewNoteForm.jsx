@@ -40,7 +40,7 @@ const NewNoteForm = () => {
 
   return (
     <div>
-      <h3>Please create a new note here</h3>
+      <h3>New Comment</h3>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Username: </label>

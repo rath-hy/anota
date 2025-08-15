@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 import NewNoteForm from './pages/NewNoteForm'
 import LoginForm from './pages/LoginForm'
-import NotesList from './pages/Notes'
+import NotesList from './pages/NotesList'
 
 //testing ground
 
@@ -17,9 +17,10 @@ const App = () => {
       ))
       } */}
       
-      <NotesList />
+  
       <LoginForm />
       <NewNoteForm />
+      <NotesList />
 
     </>
   )

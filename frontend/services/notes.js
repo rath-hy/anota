@@ -27,7 +27,7 @@ const update = (id, newObject) => {
 }
 
 const getByUrl = (url) => {
-  queryUrl = baseUrl + `?url=${url}`
+  const queryUrl = baseUrl + `?url=${url}`
   const request = axios.get(queryUrl)
   return request.then(response => response.data)
 }
