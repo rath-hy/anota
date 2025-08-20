@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     attributes: { exclude: ['userId'] },
     include: {
       model: User,
-      attributes: ['name'] //might want to change to username
+      attributes: ['id', 'name']
     }
   })
   console.log(JSON.stringify(notes, null, 2))
@@ -34,6 +34,7 @@ router.post('/', tokenExtractor, async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const note = await Note.findByPk(req.params.id)
+
   if (note) {
     res.json(note)
   } else {
