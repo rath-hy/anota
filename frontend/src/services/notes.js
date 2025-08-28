@@ -1,22 +1,11 @@
 import axios from 'axios'
 const baseUrl = 'http://localhost:3001/api/notes' //MOVE ALL BASEURLS INTO CONFIG FILE
 
-
-
-let token = null
-
-//experimental lines 
-
-import { createStore } from 'redux'
-// import { configureStore } from '@reduxjs/toolkit'
-import tokenReducer from '../src/reducers/tokenReducer'
-
-import { setTokenAction } from '../src/reducers/tokenReducer'
-
-const store = createStore(tokenReducer)
+import store from '../store'
+import { setTokenAction } from '../reducers/tokenReducer'
 
 const setToken = newToken => {
-  token = `Bearer ${newToken}`
+  const token = `Bearer ${newToken}`
   store.dispatch(setTokenAction(token))
 }
 
@@ -26,12 +15,8 @@ const getAll = () => {
 }
 
 const create = async newObject => {
-  // const config = {
-  //   headers: { Authorization: token },
-  // }
-
   const config = {
-    headers: { Authorization: store.getState() },
+    headers: { Authorization: store.getState().token },
   }
 
   const response = await axios.post(baseUrl, newObject, config)

@@ -1,44 +1,32 @@
-import { useState, useEffect } from 'react'
-import noteService from '../../services/notes'
-import UrlSearchBar from '../components/UrlSearchBar'
+import { useState, useEffect } from "react";
+import noteService from "../services/notes";
+import UrlSearchBar from "../components/UrlSearchBar";
+import Note from "../components/Note";
 
-import NewNoteForm from './NewNoteForm'
-
-import {
-  BrowserRouter as Router,
-  Routes, Route, Link
-} from 'react-router-dom'
+import NewNoteForm from "./NewNoteForm";
 
 const NotesList = () => {
-  const [notes, setNotes] = useState([])
+  const [notes, setNotes] = useState([]);
   useEffect(() => {
-    noteService
-      .getAll()
-      .then(response => {
-        setNotes(response)
-      })
-  }, [])
+    noteService.getAll().then((response) => {
+      setNotes(response);
+    });
+  }, []);
 
-  console.log(notes)
+  console.log(notes);
 
   return (
     <div>
+      <NewNoteForm />
 
-      <NewNoteForm /> 
-
-
-      <UrlSearchBar setNotes={setNotes}/>
+      <UrlSearchBar setNotes={setNotes} />
 
       <h3>General Comments</h3>
-      {notes.map(note =>
-        <div key={note.id}>
-          <div><Link to={`/users/${note.user.id}`}><em>{note.username}</em></Link> • {new Date(note.date).toDateString("en-US")}</div>
-          <div>{note.content}</div>
-        </div>
-      )}
-    
+      {notes.map((note) => (
+        <Note key={note.id} note={note} userId={note.user.id} />
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default NotesList
+export default NotesList;

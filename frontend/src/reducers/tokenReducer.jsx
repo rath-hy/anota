@@ -1,5 +1,3 @@
-import { createStore } from 'redux'
-
 const tokenReducer = (state = null, action) => {
   switch (action.type) {
     case 'SET_TOKEN':

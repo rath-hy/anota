@@ -8,9 +8,9 @@ Note.init({
     primaryKey: true,
     autoIncrement: true
   }, 
-  username: {
-    type: DataTypes.TEXT
-  },
+  // username: {
+  //   type: DataTypes.TEXT
+  // },
   private: {
     type: DataTypes.BOOLEAN
   },
@@ -23,7 +23,8 @@ Note.init({
     allowNull: false
   },
   date: {
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   },
   likes: {
     type: DataTypes.INTEGER,

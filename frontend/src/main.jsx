@@ -4,9 +4,11 @@ import App from './App.jsx'
 
 import { Provider } from 'react-redux'
 import tokenReducer from './reducers/tokenReducer.jsx'
-import { createStore } from 'redux'
+import userReducer from './reducers/userReducer.jsx'
 
-const store = createStore(tokenReducer)
+import { createStore, combineReducers } from 'redux'
+
+import store from './store/index.js'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

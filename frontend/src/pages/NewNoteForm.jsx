@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import noteService from '../../services/notes'
+import { useState } from "react";
+import noteService from "../services/notes";
 
 const NewNoteForm = () => {
-  const [username, setUsername] = useState('')
-  const [isPrivate, setIsPrivate] = useState(false)
-  const [url, setUrl] = useState('')
-  const [content, setContent] = useState('')
-  const [date, setDate] = useState('')
-  const [message, setMessage] = useState(null)
+  const [username, setUsername] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [url, setUrl] = useState("");
+  const [content, setContent] = useState("");
+  const [date, setDate] = useState("");
+  const [message, setMessage] = useState(null);
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const noteObject = {
       username,
@@ -18,77 +18,77 @@ const NewNoteForm = () => {
       url,
       content,
       date: date ? date : null, // if empty, send null
-    }
+    };
 
     try {
-      await noteService.create(noteObject)
-      setMessage('Note created successfully!')
+      await noteService.create(noteObject);
+      setMessage("Note created successfully!");
 
-      setTimeout(() => setMessage(''), 2000)
+      setTimeout(() => setMessage(""), 2000);
 
       // reset form fields if needed:
-      setUsername('')
-      setIsPrivate(false)
-      setUrl('')
-      setContent('')
-      setDate('')
+      setUsername("");
+      setIsPrivate(false);
+      setUrl("");
+      setContent("");
+      setDate("");
     } catch (error) {
-      setMessage('Failed to create note')
-      console.error(error)
+      setMessage("Failed to create note");
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div>
       <h3>New Comment</h3>
       <form onSubmit={handleSubmit}>
-        <div>
+        {/* <div>
           <label>Username: </label>
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            required 
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
           />
-        </div>
+        </div> */}
         <div>
           <label>Private: </label>
-          <input 
-            type="checkbox" 
-            checked={isPrivate} 
-            onChange={(e) => setIsPrivate(e.target.checked)} 
+          <input
+            type="checkbox"
+            checked={isPrivate}
+            onChange={(e) => setIsPrivate(e.target.checked)}
           />
         </div>
         <div>
           <label>URL: </label>
-          <input 
-            type="url" 
-            value={url} 
-            onChange={(e) => setUrl(e.target.value)} 
+          <input
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
           />
         </div>
         <div>
           <label>Content: </label>
-          <textarea 
-            value={content} 
-            onChange={(e) => setContent(e.target.value)} 
-            required 
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
           />
         </div>
-        <div>
+        {/* <div>
           <label>Date (optional): </label>
-          <input 
-            type="date" 
-            value={date} 
-            onChange={(e) => setDate(e.target.value)} 
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
           />
-        </div>
+        </div> */}
 
         <button type="submit">Create Note</button>
       </form>
       {message && <p>{message}</p>}
     </div>
-  )
-}
+  );
+};
 
-export default NewNoteForm
+export default NewNoteForm;

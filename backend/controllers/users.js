@@ -37,9 +37,13 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
+  const requestedUserId = req.params.id
+  const currentUserId = req.decodedToken?.id
+
   const user = await User.findByPk(req.params.id, {
     include: {
       model: Note,
+      where: currentUserId === requestedUserId ? {} : { private: false },
       attributes: { exclude: ['userId']}
     }
   })
