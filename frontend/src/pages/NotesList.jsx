@@ -7,17 +7,29 @@ import NewNoteForm from "./NewNoteForm";
 
 const NotesList = () => {
   const [notes, setNotes] = useState([]);
+
+  const fetchNotes = async () => {
+    try {
+      const response = await noteService.getAllPublic()
+      setNotes(response)
+    } catch (error) {
+
+    }
+  }
+
   useEffect(() => {
-    noteService.getAll().then((response) => {
-      setNotes(response);
-    });
+    fetchNotes()
   }, []);
 
-  console.log(notes);
+  console.log('fetched notes', notes);
+
+  const handleNoteCreated = () => {
+    fetchNotes()
+  }
 
   return (
     <div>
-      <NewNoteForm />
+      <NewNoteForm onNoteCreated={handleNoteCreated}/>
 
       <UrlSearchBar setNotes={setNotes} />
 

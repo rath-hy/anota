@@ -18,6 +18,10 @@ const UserPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+
+        console.log('token in store', store.getState().token)
+
+
         const config = {
           headers: {
             Authorization: store.getState().token

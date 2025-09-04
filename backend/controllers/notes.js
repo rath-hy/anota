@@ -3,19 +3,25 @@ const { Note, User } = require('../models')
 const tokenExtractor = require('../middleware/tokenExtractor')
 
 router.get('/', async (req, res) => {
+  const includeOptions = {
+    model: User,
+    attributes: ['id', 'username']
+  }
+
   const where = {}
 
   if (req.query.url) {
     where.url = req.query.url
   }
 
+  if (req.query.publicOnly === 'true') {
+    where.private = false
+  }
+
   const notes = await Note.findAll({
     where,
     attributes: { exclude: ['userId'] },
-    include: {
-      model: User,
-      attributes: ['id', 'username']
-    }
+    include: includeOptions
   })
   console.log(JSON.stringify(notes, null, 2))
   res.json(notes)

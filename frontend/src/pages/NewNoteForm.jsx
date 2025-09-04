@@ -1,7 +1,7 @@
 import { useState } from "react";
 import noteService from "../services/notes";
 
-const NewNoteForm = () => {
+const NewNoteForm = ({ onNoteCreated }) => {
   const [username, setUsername] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [url, setUrl] = useState("");
@@ -21,7 +21,7 @@ const NewNoteForm = () => {
     };
 
     try {
-      await noteService.create(noteObject);
+      const newNote = await noteService.create(noteObject);
       setMessage("Note created successfully!");
 
       setTimeout(() => setMessage(""), 2000);
@@ -32,6 +32,9 @@ const NewNoteForm = () => {
       setUrl("");
       setContent("");
       setDate("");
+
+      onNoteCreated(newNote)
+
     } catch (error) {
       setMessage("Failed to create note");
       console.error(error);

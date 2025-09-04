@@ -4,11 +4,13 @@ const bcrypt = require('bcrypt')
 const { User, Note } = require('../models')
 
 router.get('/', async (req, res) => {
+  const includeOptions = {
+    model: Note,
+    attributes: { exclude: ['userId']}
+  }
+
   const users = await User.findAll({
-    include: {
-      model: Note,
-      attributes: { exclude: ['userId']}
-    }
+    include: includeOptions
   })
   res.json(users)
 })
@@ -36,14 +38,30 @@ router.post('/', async (req, res) => {
   }
 })
 
+// router.get('/:id', async (req, res) => {
+//   const requestedUserId = req.params.id
+//   const currentUserId = req.decodedToken?.id
+
+//   const user = await User.findByPk(req.params.id, {
+//     include: {
+//       model: Note,
+//       where: currentUserId === requestedUserId ? {} : { private: false },
+//       attributes: { exclude: ['userId']}
+//     }
+//   })
+//   if (user) {
+//     res.json(user)
+//   } else {
+//     res.status(404).end()
+//   }
+// })
+
 router.get('/:id', async (req, res) => {
   const requestedUserId = req.params.id
-  const currentUserId = req.decodedToken?.id
 
   const user = await User.findByPk(req.params.id, {
     include: {
       model: Note,
-      where: currentUserId === requestedUserId ? {} : { private: false },
       attributes: { exclude: ['userId']}
     }
   })

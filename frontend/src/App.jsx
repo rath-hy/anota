@@ -12,31 +12,22 @@ import LoginForm from "./components/LoginForm";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserAction } from './reducers/userReducer'
-
-//testing ground
+import noteService from './services/notes' 
 
 import store from './store'
 import { useEffect } from 'react'
 
 const App = () => {
-  const currentUser = useSelector(state => state.user)
-
-  // return (
-  //   <>
-  //     <LoginForm />
-  //     <NewNoteForm />
-  //     <NotesList />
-  //   </>
-  // )
-
   const dispatch = useDispatch()
+  const currentUser = useSelector(state => state.user)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      console.log("parsed user:", user);
+      console.log("parsed user", user);
       dispatch(setUserAction({ id: user.id, username: user.username }))
+      noteService.setToken(user.token)
     }
   }, [dispatch]);
 
@@ -44,7 +35,6 @@ const App = () => {
     padding: 5,
   };
 
-  //the 'me' page should only show if i'm logged in
   return (
     <Router>
       <div>
@@ -71,7 +61,6 @@ const App = () => {
         <Route path="/" element={<NotesList />} />
         <Route path="/users/:id" element={<UserPage />} />
         <Route path="/account" element={<LoginPage />} />
-
 
         {/* <Route path='/login' element={<LoginForm />}/> */}
       </Routes>

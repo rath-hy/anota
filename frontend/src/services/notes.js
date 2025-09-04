@@ -14,10 +14,17 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
+const getAllPublic = async () => {
+  const response = await axios.get(`${baseUrl}?publicOnly=true`)
+  return response.data
+}
+
 const create = async newObject => {
   const config = {
     headers: { Authorization: store.getState().token },
   }
+
+  console.log('config', config)
 
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
@@ -34,4 +41,4 @@ const getByUrl = (url) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, getByUrl, create, update, setToken }
+export default { getAll, getAllPublic, getByUrl, create, update, setToken }
