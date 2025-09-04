@@ -13,7 +13,7 @@ import store from '../store'
 const UserPage = () => {
   const id = useParams().id
   const [user, setUser] = useState(null)
-  const currentUser = useSelector(state => state.user)
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -39,16 +39,61 @@ const UserPage = () => {
     fetchUser()
   }, [id])
 
+  const handleFilterChange = (event) => {
+    console.log('filter', event.target.value)
+    setFilter(event.target.value)
+  }
+
+  const filteredNotes = user?.notes.filter(note => {
+    switch (filter) {
+      case 'private':
+        return note.private
+      case 'public':
+        return !note.private
+      case 'all':
+      default:
+        return true
+    }
+  })
+
+
   if (user) {
     return (
       <div>
         <div>username: {user.username}</div>
         <div>name: {user.name}</div>
         <div>note count: {user.notes.length} </div>
-        <div>like count: </div>
+        <div>total like count: </div> 
+
+        <fieldset>
+          <input 
+            type='radio' 
+            id='filterAll' 
+            name='filter' 
+            value='all' 
+            onChange={handleFilterChange}
+          />
+          <label for='filterAll'>All</label>
+
+          <input 
+            type='radio' 
+            id='filterPublic' 
+            name='filter' 
+            value='public' 
+            onChange={handleFilterChange}/>
+          <label for='filterPublic'>Public</label>
+
+          <input 
+            type='radio' 
+            id='filterPrivate' 
+            name='filter' 
+            value='private' 
+            onChange={handleFilterChange}/>
+          <label for='filterPrivate'>Private</label>
+        </fieldset>
 
         <div>notes:</div>
-        {user.notes.map(note => 
+        {filteredNotes.map(note => 
           <Note key={note.id} note={note} userId={user.id} showUsername={false}/>
         )}
 
