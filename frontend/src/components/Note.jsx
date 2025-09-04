@@ -16,9 +16,10 @@ const Note = ({ note, userId, showUsername=true, showUrl=true }) => {
 
         {showUrl ? (
           <>
-            <em>{note.url}</em> •{" "}
+            <em><a href={note.url} target="_blank" rel="noopener noreferrer">{note.url}</a></em> •{" "}
           </>
-        ) : null}
+        ) : null
+        }
 
         {new Date(note.date).toDateString("en-US")}
       </div>
