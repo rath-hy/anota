@@ -61,4 +61,27 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
+router.put('/:id', tokenExtractor, async (req, res) => {
+  try {
+    const note = await Note.findByPk(req.params.id)
+    
+    if (!note) {
+      return res.status(404).json({ error: 'Note not found' })
+    }
+
+    // Check if the user owns this note
+    if (note.userId !== req.decodedToken.id) {
+      return res.status(403).json({ error: 'Permission denied' })
+    }
+
+    // Update the note with new data
+    const updatedNote = await note.update(req.body)
+    
+    res.json(updatedNote)
+  } catch (error) {
+    console.error('Error updating note:', error)
+    res.status(400).json({ error: error.message || 'Failed to update note' })
+  }
+})
+
 module.exports = router

@@ -63,7 +63,7 @@ const UserPage = () => {
         <div>username: {user.username}</div>
         <div>name: {user.name}</div>
         <div>note count: {user.notes.length} </div>
-        <div>total like count: </div> 
+        <div>total like count: {user.notes.reduce( (prev, curr) => prev + curr.likes, 0 )}</div> 
 
         <fieldset>
           <input 
@@ -73,7 +73,7 @@ const UserPage = () => {
             value='all' 
             onChange={handleFilterChange}
           />
-          <label for='filterAll'>All</label>
+          <label htmlFor='filterAll'>All</label>
 
           <input 
             type='radio' 
@@ -81,7 +81,7 @@ const UserPage = () => {
             name='filter' 
             value='public' 
             onChange={handleFilterChange}/>
-          <label for='filterPublic'>Public</label>
+          <label htmlFor='filterPublic'>Public</label>
 
           <input 
             type='radio' 
@@ -89,7 +89,7 @@ const UserPage = () => {
             name='filter' 
             value='private' 
             onChange={handleFilterChange}/>
-          <label for='filterPrivate'>Private</label>
+          <label htmlFor='filterPrivate'>Private</label>
         </fieldset>
 
         <div>notes:</div>

@@ -1,0 +1,12 @@
+PUT http://localhost:3001/api/notes/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InB1dGh5cmF0aHkiLCJpZCI6MiwiaWF0IjoxNzU3MDAxNjExfQ.GMu3SsOYqg0FQg5vRLeX2zLXMp7hI6GGLGmJKjp2X_U
+
+{
+  "private": false,
+  "url": "https://www.youtube.com/watch?v=Bd_9hgpo1u4",
+  "content": "I like black tea.",
+  "date": "2025-08-20T19:56:07.836Z",
+  "likes": 31,
+  "userId": 2
+}
