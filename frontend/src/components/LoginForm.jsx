@@ -4,20 +4,27 @@ import noteService from "../services/notes";
 
 import { useNavigate } from "react-router-dom";
 
+import { useDispatch } from 'react-redux'
+import { setUserAction } from "../reducers/userReducer";
+
+
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
 
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-    }
-  }, []);
+
+  // useEffect(() => {
+  //   const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
+  //   if (loggedUserJSON) {
+  //     const user = JSON.parse(loggedUserJSON);
+  //     noteService.setToken(user.token);
+  //     dispatch(setUserAction(user))
+  //   }
+  // }, [dispatch]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -32,7 +39,8 @@ const LoginForm = () => {
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
 
       noteService.setToken(user.token);
-      setUser(user);
+      dispatch(setUserAction(user))
+
       setUsername("");
       setPassword("");
       navigate("/");

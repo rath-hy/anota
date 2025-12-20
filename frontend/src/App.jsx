@@ -16,6 +16,7 @@ import noteService from './services/notes'
 
 import store from './store'
 import { useEffect } from 'react'
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -26,7 +27,8 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       console.log("parsed user", user);
-      dispatch(setUserAction({ id: user.id, username: user.username }))
+      // dispatch(setUserAction({ id: user.id, username: user.username }))
+      dispatch(setUserAction(user))
       noteService.setToken(user.token)
     }
   }, [dispatch]);
@@ -59,7 +61,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<NotesList />} />
-        <Route path="/users/:id" element={<UserPage />} />
+        <Route path="/users/:id" element={<ProfilePage />} />
         <Route path="/account" element={<LoginPage />} />
 
         {/* <Route path='/login' element={<LoginForm />}/> */}

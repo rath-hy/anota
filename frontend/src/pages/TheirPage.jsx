@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux'
 
 import store from '../store'
 
-const UserPage = () => {
+const TheirPage = () => {
   const id = useParams().id
   const [user, setUser] = useState(null)
   const [filter, setFilter] = useState('all')
@@ -18,9 +18,10 @@ const UserPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        console.log('FETCHING USER WITH ID:', id) // Add this
+        console.log('URL:', `${baseUrl}/${id}?public=true`) // Add this
 
         console.log('token in store', store.getState().token)
-
 
         const config = {
           headers: {
@@ -28,8 +29,8 @@ const UserPage = () => {
           }
         }
 
-        const response = await axios.get(`${baseUrl}/${id}`, config)
-        console.log('user fetched', response.data)
+        const response = await axios.get(`${baseUrl}/${id}?public=true`, config)
+        console.log('user fetched (only public info)', response.data)
         setUser(response.data)
       } catch (error) {
 
@@ -44,17 +45,17 @@ const UserPage = () => {
     setFilter(event.target.value)
   }
 
-  const filteredNotes = user?.notes.filter(note => {
-    switch (filter) {
-      case 'private':
-        return note.private
-      case 'public':
-        return !note.private
-      case 'all':
-      default:
-        return true
-    }
-  })
+  // const filteredNotes = user?.notes.filter(note => {
+  //   switch (filter) {
+  //     case 'private':
+  //       return note.private
+  //     case 'public':
+  //       return !note.private
+  //     case 'all':
+  //     default:
+  //       return true
+  //   }
+  // })
 
 
   if (user) {
@@ -65,38 +66,8 @@ const UserPage = () => {
         <div>note count: {user.notes.length} </div>
         <div>total like count: {user.notes.reduce( (prev, curr) => prev + curr.likes, 0 )}</div> 
 
-        <fieldset>
-          <input 
-            type='radio' 
-            id='filterAll' 
-            name='filter' 
-            value='all' 
-            checked={filter === 'all'}
-            onChange={handleFilterChange}
-          />
-          <label htmlFor='filterAll'>All</label>
-
-          <input 
-            type='radio' 
-            id='filterPublic' 
-            name='filter' 
-            value='public' 
-            checked={filter === 'public'}
-            onChange={handleFilterChange}/>
-          <label htmlFor='filterPublic'>Public</label>
-
-          <input 
-            type='radio' 
-            id='filterPrivate' 
-            name='filter' 
-            value='private' 
-            checked={filter === 'private'}
-            onChange={handleFilterChange}/>
-          <label htmlFor='filterPrivate'>Private</label>
-        </fieldset>
-
         <div>notes:</div>
-        {filteredNotes.map(note => 
+        {user?.notes.map(note => 
           <Note key={note.id} note={note} userId={user.id} showUsername={false}/>
         )}
 
@@ -112,4 +83,4 @@ const UserPage = () => {
 
 }
 
-export default UserPage
+export default TheirPage

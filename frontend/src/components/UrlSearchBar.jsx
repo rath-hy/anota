@@ -7,7 +7,7 @@ const UrlSearchBar = ({ setNotes }) => {
 
   const handleSearch = async (event) => {
     event.preventDefault();
-    const notes = await noteService.getByUrl(url);
+    const notes = await noteService.getPublicByUrl(url);
     setNotes(notes);
 
     // setUrl('')

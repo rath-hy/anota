@@ -35,10 +35,14 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-const getByUrl = (url) => {
-  const queryUrl = baseUrl + `?url=${url}`
-  const request = axios.get(queryUrl)
+const getPublicByUrl = (url) => {
+  const request = axios.get(baseUrl, {
+    params: {
+      url,
+      publicOnly: true
+    }
+  })
   return request.then(response => response.data)
 }
 
-export default { getAll, getAllPublic, getByUrl, create, update, setToken }
+export default { getAll, getAllPublic, getPublicByUrl, create, update, setToken }
