@@ -46,4 +46,9 @@ const getPublicByUrl = (url) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, getAllPublic, getPublicByUrl, create, update, setToken }
+const deleteNote = async id => {
+  const response = await axios.delete(`${ baseUrl }/${id}`)
+  return response.data
+}
+
+export default { getAll, getAllPublic, getPublicByUrl, create, update, setToken, deleteNote }

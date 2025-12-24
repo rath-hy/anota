@@ -2,7 +2,7 @@ import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 
 import TheirPage from "./TheirPage"
-import UserPage from "./UserPage"
+import MePage from "./MePage"
 
 const ProfilePage = () => {
   const { id } = useParams()
@@ -19,7 +19,7 @@ const ProfilePage = () => {
   console.log('id', id)
   console.log('logged in user id', id)
 
-  return isOwnProfile ? <UserPage/> : <TheirPage/>
+  return isOwnProfile ? <MePage/> : <TheirPage/>
 }
 
 export default ProfilePage

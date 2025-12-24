@@ -14,6 +14,7 @@ const NotesList = () => {
     try {
       const response = await noteService.getAllPublic()
       setNotes(response)
+
     } catch (error) {
 
     }
@@ -40,7 +41,7 @@ const NotesList = () => {
 
       <h3>General Comments</h3>
       {notes.map((note) => (
-        <Note key={note.id} note={note} userId={note.user.id} />
+        <Note key={note.id} note={note} userId={note.user.id}/>
       ))}
     </div>
   );

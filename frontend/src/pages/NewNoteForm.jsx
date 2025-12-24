@@ -29,8 +29,8 @@ const NewNoteForm = ({ onNoteCreated }) => {
 
     try {
       const newNote = await noteService.create(noteObject);
+      
       setMessage("Note created successfully!");
-
       setTimeout(() => setMessage(""), 2000);
 
       // reset form fields if needed:

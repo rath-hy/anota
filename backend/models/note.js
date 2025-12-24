@@ -8,9 +8,6 @@ Note.init({
     primaryKey: true,
     autoIncrement: true
   }, 
-  // username: {
-  //   type: DataTypes.TEXT
-  // },
   private: {
     type: DataTypes.BOOLEAN
   },
