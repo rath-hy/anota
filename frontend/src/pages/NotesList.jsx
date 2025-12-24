@@ -5,6 +5,8 @@ import Note from "../components/Note";
 
 import NewNoteForm from "./NewNoteForm";
 
+import GoogleLoginButton from "../components/GoogleLoginButton";
+
 const NotesList = () => {
   const [notes, setNotes] = useState([]);
 
@@ -29,6 +31,9 @@ const NotesList = () => {
 
   return (
     <div>
+      
+      <GoogleLoginButton />
+
       <NewNoteForm onNoteCreated={handleNoteCreated}/>
 
       <UrlSearchBar setNotes={setNotes} />

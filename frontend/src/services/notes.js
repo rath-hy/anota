@@ -24,6 +24,7 @@ const create = async newObject => {
     headers: { Authorization: store.getState().token },
   }
 
+  console.log('user when header is created', store.getState().user)
   console.log('config', config)
 
   const response = await axios.post(baseUrl, newObject, config)

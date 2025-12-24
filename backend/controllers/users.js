@@ -26,10 +26,11 @@ router.post('/', async (req, res) => {
     const newUser = {
       username,
       name,
-      passwordHash
+      email,
+      passwordHash,
     }
 
-    console.log(newUser)
+    console.log('new user', newUser)
 
     const user = await User.create(newUser)
 

@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import noteService from "../services/notes";
+
+import store from '../store'
 
 const NewNoteForm = ({ onNoteCreated }) => {
   const [username, setUsername] = useState("");
@@ -9,11 +12,15 @@ const NewNoteForm = ({ onNoteCreated }) => {
   const [date, setDate] = useState("");
   const [message, setMessage] = useState(null);
 
+  const user = useSelector(state => state.user)
+  // const token = useSelector(state => state.token)
+  // noteService.setToken(token)
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const noteObject = {
-      username,
+      username: user.username,
       private: isPrivate,
       url,
       content,

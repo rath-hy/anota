@@ -12,19 +12,9 @@ const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-  // useEffect(() => {
-  //   const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
-  //   if (loggedUserJSON) {
-  //     const user = JSON.parse(loggedUserJSON);
-  //     noteService.setToken(user.token);
-  //     dispatch(setUserAction(user))
-  //   }
-  // }, [dispatch]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -36,9 +26,11 @@ const LoginForm = () => {
         password,
       });
 
+      console.log('user', user)
+
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
 
-      noteService.setToken(user.token);
+      // noteService.setToken(user.token);
       dispatch(setUserAction(user))
 
       setUsername("");

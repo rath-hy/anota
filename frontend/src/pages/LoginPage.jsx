@@ -17,18 +17,6 @@ const LoginPage = () => {
   const dispatch = useDispatch()
   const currentUser = useSelector(state => state.user)
 
-  // useEffect(() => {
-  //   const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
-  //   if (loggedUserJSON) {
-  //     const user = JSON.parse(loggedUserJSON);
-  //     console.log("parsed user is", user);
-  //     setUser(user);
-  //     // noteService.setToken(user.token)
-
-  //     dispatch(setUserAction({ id: user.id, username: user.username }))
-  //   }
-  // }, []);
-
   const handleLogout = async () => {
     console.log("tried to log out");
     window.localStorage.removeItem("loggedNoteappUser");

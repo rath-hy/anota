@@ -18,6 +18,11 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false
   },
+  email: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: true
+  },
   passwordHash: {
     type: DataTypes.STRING,
     allowNull: true //change to false later
