@@ -7,6 +7,9 @@ import { setUserAction } from '../reducers/userReducer'
 import { setTokenAction } from "../reducers/tokenReducer";
 import noteService from '../services/notes'
 
+import { Button } from '@mui/material'
+import GoogleIcon from '@mui/icons-material/Google'
+
 const GoogleLoginButton = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -45,9 +48,13 @@ const GoogleLoginButton = () => {
   }
 
   return (
-    <button onClick={handleGoogleLogin}>
-      Sign in with Google
-    </button>
+    <Button
+      variant="contained" 
+      startIcon={<GoogleIcon />}
+      onClick={handleGoogleLogin}
+    >
+      sign in
+    </Button>
   )
 }
 
