@@ -3,12 +3,18 @@ import {
   Routes, Route, Link
 } from 'react-router-dom'
 
+import { useNavigate } from 'react-router-dom'
+
+
+//task: create a button where clicking it brings you to all the notes of that url
+// the button can later become the logo
+
 
 import noteService from '../services/notes'
 
 import { useSelector } from 'react-redux'
 
-const Note = ({ note, userId, showUsername=true, showUrl=true, onDelete }) => {
+const Note = ({ note, userId, showUsername=true, showUrl=true, showGo=true, onDelete }) => {
 
   console.log('userId', userId)
   console.log('note', note)
@@ -16,6 +22,8 @@ const Note = ({ note, userId, showUsername=true, showUrl=true, onDelete }) => {
   //it should compare against the logged in user id
   const currentUser = useSelector(state => state.user)
   const canDelete = currentUser && userId === currentUser.id
+
+  const navigate = useNavigate()
 
   const handleDelete = async () => {
     try {
@@ -46,6 +54,12 @@ const Note = ({ note, userId, showUsername=true, showUrl=true, onDelete }) => {
             <em><a href={note.url} target="_blank" rel="noopener noreferrer">{note.url}</a></em> •{" "}
           </>
         ) : null
+        }
+
+        {showGo ? (
+          <button onClick={() => navigate(`notes?url=${encodeURIComponent(note.url)}`)}>
+            🔵
+          </button>) : null
         }
 
         {new Date(note.date).toDateString("en-US")}

@@ -4,7 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import NotesList from "./pages/NotesList";
 import MePage from "./pages/MePage";
 
-import Account from "./components/Account";
+import NotesByUrlPage from "./pages/NotesByUrl";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
@@ -58,9 +58,10 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path="/" element={<NotesList />} />
-        <Route path="/users/:id" element={<ProfilePage />} />
-        <Route path="/account" element={<LoginPage />} />
+        <Route path="/" element={<NotesList/>}/>
+        <Route path="/users/:id" element={<ProfilePage/>}/>
+        <Route path="/account" element={<LoginPage/>}/>
+        <Route path="/notes" element={<NotesByUrlPage/>}/>
 
         {/* <Route path='/login' element={<LoginForm />}/> */}
       </Routes>
