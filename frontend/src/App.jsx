@@ -1,14 +1,17 @@
 // import { useState } from 'react'
 import NewNoteForm from "./pages/NewNoteForm";
 import LoginPage from "./pages/LoginPage";
+import LoginPageTwo from "./pages/LoginPageTwo";
 import NotesList from "./pages/NotesList";
 import MePage from "./pages/MePage";
+
+import LoginForm from "./components/LoginForm";
 
 import NotesByUrlPage from "./pages/NotesByUrl";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import LoginForm from "./components/LoginForm";
+// import LoginForm from "./components/LoginForm";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setUserAction } from "./reducers/userReducer";
@@ -63,7 +66,7 @@ const App = () => {
         <Route path="/account" element={<LoginPage/>}/>
         <Route path="/notes" element={<NotesByUrlPage/>}/>
 
-        {/* <Route path='/login' element={<LoginForm />}/> */}
+        <Route path='/login' element={<LoginPageTwo />}/>
       </Routes>
     </Router>
   );

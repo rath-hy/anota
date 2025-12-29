@@ -1,6 +1,11 @@
+import { TextField, Button, FormGroup, FormControlLabel } from "@mui/material";
+
+
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import noteService from "../services/notes";
+
+import { Checkbox } from "@mui/material";
 
 import store from '../store'
 
@@ -50,6 +55,7 @@ const NewNoteForm = ({ onNoteCreated }) => {
 
   return (
     <div>
+
       <h3>New Comment</h3>
       <form onSubmit={handleSubmit}>
         {/* <div>
@@ -62,29 +68,63 @@ const NewNoteForm = ({ onNoteCreated }) => {
           />
         </div> */}
         <div>
-          <label>Private: </label>
-          <input
+          {/* <label>Private: </label> */}
+          {/* <input
             type="checkbox"
             checked={isPrivate}
             onChange={(e) => setIsPrivate(e.target.checked)}
-          />
+          /> */}
+
+
+          <FormControlLabel control={
+              <Checkbox 
+                checked={isPrivate}
+                onChange={(e) => setIsPrivate(e.target.checked)}
+                slotProps={{
+                  input: { 'aria-label': 'controlled' },
+                }}
+            />
+            } label="Private" />
+
         </div>
-        <div>
+        {/* <div>
           <label>URL: </label>
           <input
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
           />
-        </div>
+        </div> */}
+
         <div>
+            <TextField 
+              id="filled-basic" 
+              variant="filled"
+              type="url" 
+              label="url" 
+              value={url} 
+              onChange={(e) => setUrl(e.target.value)} />
+        </div>
+
+
+        {/* <div>
           <label>Content: </label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
           />
+        </div> */}
+
+        <div>
+          <TextField 
+            id="outlined-basic" 
+            label="Note" 
+            variant="outlined" 
+            value={content} 
+            onChange={(e) => setContent(e.target.value)} />
         </div>
+          
         {/* <div>
           <label>Date (optional): </label>
           <input
@@ -94,7 +134,16 @@ const NewNoteForm = ({ onNoteCreated }) => {
           />
         </div> */}
 
-        <button type="submit">Create Note</button>
+        {/* <button type="submit">Create Note</button> */}
+
+        <Button 
+          variant="contained" 
+          size="small"
+          type="submit"
+        >
+            Create note
+        </Button>
+
       </form>
       {message && <p>{message}</p>}
     </div>
