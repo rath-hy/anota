@@ -29,10 +29,10 @@ const GoogleLoginButton = () => {
         idToken
       })
 
-      //BUG: this is { token: blablabla } instead of { username: ? id: ?}
       const user = response.data
 
-      console.log('user', user)
+      
+      console.log('user info stored locally', user)
       
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
       dispatch(setUserAction({id: user.id, name: user.name, username: user.username}))

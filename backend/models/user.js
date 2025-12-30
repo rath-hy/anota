@@ -26,6 +26,10 @@ User.init({
   passwordHash: {
     type: DataTypes.STRING,
     allowNull: true //change to false later
+  },
+  photoUrl: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
 }, {
   sequelize,

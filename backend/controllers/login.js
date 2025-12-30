@@ -46,7 +46,7 @@ router.post('/google', async (request, response) => {
     console.log('id token', idToken)
     const decodedToken = await admin.auth().verifyIdToken(idToken)
     console.log('decoded token', decodedToken)
-    const { email, name, uid } = decodedToken
+    const { email, name, uid, picture } = decodedToken
 
     let user = await User.findOne({ where: { email }})
 
@@ -56,6 +56,7 @@ router.post('/google', async (request, response) => {
         username,
         name: name || email, 
         email,
+        photoUrl: picture,
         passwordHash: null
       })
     }
@@ -71,7 +72,8 @@ router.post('/google', async (request, response) => {
       token,
       username: user.username,
       id: user.id,
-      name: user.name
+      name: user.name,
+      photoUrl: picture
     })
   } catch (error) {
     console.error('Google login error:', error)

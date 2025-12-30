@@ -16,9 +16,6 @@ import { useSelector } from 'react-redux'
 
 const Note = ({ note, userId, showUsername=true, showUrl=true, showGo=true, onDelete }) => {
 
-  console.log('userId', userId)
-  console.log('note', note)
-
   //it should compare against the logged in user id
   const currentUser = useSelector(state => state.user)
   const canDelete = currentUser && userId === currentUser.id

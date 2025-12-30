@@ -13,6 +13,10 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 // import LoginForm from "./components/LoginForm";
 
+// import HomeFilledIcon from '@mui/icons-material/HomeFilled';
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
+
 import { useDispatch, useSelector } from "react-redux";
 import { setUserAction } from "./reducers/userReducer";
 import noteService from "./services/notes";
@@ -44,12 +48,13 @@ const App = () => {
     <Router>
       <div>
         <Link style={padding} to="/">
-          notes
+          <HomeIcon/>
         </Link>
 
+        <img src={currentUser?.photoUrl} />
         {currentUser && (
           <Link style={padding} to={`/users/${currentUser.id}`}>
-            me
+            <PersonIcon/>
           </Link>
         )}
 
