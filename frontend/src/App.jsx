@@ -8,8 +8,11 @@ import MePage from "./pages/MePage";
 import LoginForm from "./components/LoginForm";
 
 import NotesByUrlPage from "./pages/NotesByUrl";
+import { Avatar } from "@mui/material";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+
+import ProfileMenu from "./components/ProfileMenu";
 
 // import LoginForm from "./components/LoginForm";
 
@@ -51,12 +54,7 @@ const App = () => {
           <HomeIcon/>
         </Link>
 
-        <img src={currentUser?.photoUrl} />
-        {currentUser && (
-          <Link style={padding} to={`/users/${currentUser.id}`}>
-            <PersonIcon/>
-          </Link>
-        )}
+        <ProfileMenu />
 
         <Link style={padding} to="/account">
           account
