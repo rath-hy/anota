@@ -29,9 +29,13 @@ const NotesByUrlPage = () => {
 
   return (
     <div>
-      <a href={url}><h3>{url}</h3></a>
+      {/* <a href={url}><h3>{url}</h3></a> */}
 
       {/* <Typography variant="h3">{url}</Typography> */}
+
+      {/* {notes.map(note => 
+        <Note key={note.id} note={note} userId={note.user.id} showUrl={false} showGo={false}/>
+      )} */}
 
       <Card>
         <CardContent>
@@ -42,12 +46,6 @@ const NotesByUrlPage = () => {
           </Box>
         </CardContent>
       </Card>
-
-      
-
-      {notes.map(note => 
-        <Note key={note.id} note={note} userId={note.user.id} showUrl={false} showGo={false}/>
-      )}
 
       {notes.map(note => 
         <StyledNote 

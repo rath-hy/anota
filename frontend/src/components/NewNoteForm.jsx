@@ -1,7 +1,7 @@
-import { TextField, Button, FormGroup, FormControlLabel } from "@mui/material";
+import { TextField, Button, FormGroup, FormControlLabel, Autocomplete } from "@mui/material";
 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import noteService from "../services/notes";
 
@@ -9,7 +9,12 @@ import { Checkbox } from "@mui/material";
 
 import store from '../store'
 
-const NewNoteForm = ({ onNoteCreated }) => {
+import { Typography } from "@mui/material";
+
+// import TextField from "@mui/material";
+// import Autocomplete from "@mui/material";
+
+const NewNoteForm = ({ onNoteCreated, urlOptions }) => {
   const [username, setUsername] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [url, setUrl] = useState("");
@@ -17,9 +22,24 @@ const NewNoteForm = ({ onNoteCreated }) => {
   const [date, setDate] = useState("");
   const [message, setMessage] = useState(null);
 
+  // const [urlOptions, setUrlOptions] = useState([])
+
   const user = useSelector(state => state.user)
+
   // const token = useSelector(state => state.token)
   // noteService.setToken(token)
+
+  // useEffect(() => {
+  //   const timer = setTimeout(async () => {
+  //     if (url.length > 2) {
+  //       const urls = await noteService.searchUrls(url)
+  //       setUrlOptions(urls)
+  //     }
+  //   }, 300)
+
+  //   return () => clearTimeout(timer)
+  // }, [url])
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -56,7 +76,9 @@ const NewNoteForm = ({ onNoteCreated }) => {
   return (
     <div>
 
-      <h3>New Comment</h3>
+      {/* <h3>New Comment</h3> */}
+      <Typography variant="h5">Create a note</Typography>
+
       <form onSubmit={handleSubmit}>
         {/* <div>
           <label>Username: </label>
@@ -96,7 +118,29 @@ const NewNoteForm = ({ onNoteCreated }) => {
           />
         </div> */}
 
+
+          {/* MODIFY HERE */}
+        
         <div>
+          <Autocomplete 
+            freeSolo
+            options={urlOptions}
+            value={url}
+            onChange={(event, newValue) => setUrl(newValue || '')}
+            onInputChange={(event, newInputValue) => setUrl(newInputValue)}
+            renderInput={(params) => (
+              <TextField 
+                {...params}
+                required
+                label="URL"
+              />
+            )}
+          />
+
+        </div>
+
+
+        {/* <div>
             <TextField 
               id="filled-basic" 
               variant="filled"
@@ -104,7 +148,7 @@ const NewNoteForm = ({ onNoteCreated }) => {
               label="url" 
               value={url} 
               onChange={(e) => setUrl(e.target.value)} />
-        </div>
+        </div> */}
 
 
         {/* <div>

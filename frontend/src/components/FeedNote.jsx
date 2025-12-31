@@ -1,4 +1,4 @@
-// components/RedditStyleNote.jsx
+// components/FeedNote.jsx
 import { useState } from 'react'
 import { 
   Card, 
@@ -8,17 +8,24 @@ import {
   Box, 
   IconButton,
   Collapse,
-  Link as MuiLink
+  Link as MuiLink,
+  Chip
 } from '@mui/material'
-import { Delete as DeleteIcon, ExpandMore, ExpandLess } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { 
+  Delete as DeleteIcon, 
+  ExpandMore, 
+  ExpandLess,
+  OpenInNew as OpenInNewIcon
+} from '@mui/icons-material'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import noteService from '../services/notes'
 
-const StyledNote = ({ note, onDelete }) => {
+const FeedNote = ({ note, onDelete }) => {
   const [expanded, setExpanded] = useState(true)
   const [showFullContent, setShowFullContent] = useState(false)
   const currentUser = useSelector(state => state.user)
+  const navigate = useNavigate()
   
   const canDelete = currentUser && note.user.id === currentUser.id
   const isLongContent = note.content.length > 300
@@ -37,36 +44,42 @@ const StyledNote = ({ note, onDelete }) => {
     }
   }
 
-  // Generate color from username for avatar
   const stringToColor = (string) => {
     let hash = 0
     for (let i = 0; i < string.length; i++) {
       hash = string.charCodeAt(i) + ((hash << 5) - hash)
     }
-    const color = `hsl(${hash % 360}, 65%, 50%)`
-    return color
+    return `hsl(${hash % 360}, 65%, 50%)`
+  }
+
+  const displayUrl = (url) => {
+    try {
+      const urlObj = new URL(url)
+      return urlObj.hostname.replace('www.', '')
+    } catch {
+      return url
+    }
   }
 
   return (
     <Card sx={{ mb: 1, boxShadow: 1 }}>
-      <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
-        {/* Header */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <CardContent sx={{ py: 1, '&:last-child': { pb: 1 } }}>
+        {/* Single line header */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <IconButton 
             size="small" 
             onClick={() => setExpanded(!expanded)}
-            sx={{ mr: 1, p: 0.5 }}
+            sx={{ p: 0.5 }}
           >
-            {expanded ? <ExpandLess /> : <ExpandMore />}
+            {expanded ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
           </IconButton>
           
           <Avatar 
             sx={{ 
-              width: 24, 
-              height: 24, 
+              width: 20, 
+              height: 20, 
               bgcolor: stringToColor(note.user.username),
-              fontSize: '0.75rem',
-              mr: 1
+              fontSize: '0.65rem'
             }}
           >
             {note.user.username[0].toUpperCase()}
@@ -80,6 +93,7 @@ const StyledNote = ({ note, onDelete }) => {
               variant="body2" 
               sx={{ 
                 fontWeight: 600,
+                fontSize: '0.875rem',
                 '&:hover': { textDecoration: 'underline' }
               }}
             >
@@ -87,36 +101,56 @@ const StyledNote = ({ note, onDelete }) => {
             </Typography>
           </Link>
           
-          <Typography variant="caption" color="text.secondary" sx={{ mx: 1 }}>
+          <Typography variant="caption" color="text.secondary">
             •
           </Typography>
           
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
             {new Date(note.date).toLocaleDateString('en-US', { 
               month: 'short', 
-              day: 'numeric',
-              year: 'numeric'
+              day: 'numeric'
             })}
           </Typography>
 
-          {canDelete && onDelete && (
-            <IconButton 
-              size="small" 
-              onClick={handleDelete}
-              sx={{ ml: 'auto' }}
-              color="error"
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          )}
+          <Typography variant="caption" color="text.secondary">
+            •
+          </Typography>
+
+          <Chip 
+            label={displayUrl(note.url)}
+            size="small"
+            onClick={() => navigate(`/notes?url=${encodeURIComponent(note.url)}`)}
+            sx={{ 
+              fontSize: '0.7rem',
+              height: '20px',
+              cursor: 'pointer',
+              '&:hover': { bgcolor: 'primary.light' }
+            }}
+          />
+
+          <IconButton
+            size="small"
+            href={note.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            component="a"
+            sx={{ p: 0.5 }}
+          >
+            <OpenInNewIcon fontSize="small" sx={{ fontSize: 16 }} />
+          </IconButton>
+
         </Box>
 
         {/* Content */}
         <Collapse in={expanded}>
-          <Box sx={{ pl: 4 }}>
+          <Box sx={{ pl: 4, mt: 1 }}>
             <Typography 
               variant="body2" 
-              sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+              sx={{ 
+                whiteSpace: 'pre-wrap', 
+                wordBreak: 'break-word',
+                fontSize: '0.875rem'
+              }}
             >
               {displayContent}
             </Typography>
@@ -138,4 +172,4 @@ const StyledNote = ({ note, onDelete }) => {
   )
 }
 
-export default StyledNote
+export default FeedNote

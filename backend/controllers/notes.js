@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const { Note, User } = require('../models')
 const tokenExtractor = require('../middleware/tokenExtractor')
+const { sequelize } = require('../util/db')
+const { Op } = require('sequelize')
 
 router.get('/', async (req, res) => {
   const includeOptions = {
@@ -36,6 +38,20 @@ router.post('/', tokenExtractor, async (req, res) => {
   } catch(error) {
     return res.status(400).json({ error })
   }
+})
+
+router.get('/urls', async (req, res) => {
+  const search = req.query.search || ''
+
+  const urls = await Note.findAll({
+    attributes: [[sequelize.fn('DISTINCT', sequelize.col('url')), 'url' ]],
+    where: {
+      url: { [Op.iLike]: `%${search}`}
+    },
+    limit: 10
+  })
+
+  res.json(urls.map(n => n.url))
 })
 
 router.get('/:id', async (req, res) => {

@@ -1,5 +1,5 @@
 // import { useState } from 'react'
-import NewNoteForm from "./pages/NewNoteForm";
+import NewNoteForm from "./components/NewNoteForm";
 import LoginPage from "./pages/LoginPage";
 import LoginPageTwo from "./pages/LoginPageTwo";
 import NotesList from "./pages/NotesList";
@@ -12,13 +12,17 @@ import { Avatar } from "@mui/material";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
+import AddIcon from "@mui/icons-material/Add";
+
 import ProfileMenu from "./components/ProfileMenu";
+
+import NewNotePage from "./pages/NewNotePage";
 
 // import LoginForm from "./components/LoginForm";
 
 // import HomeFilledIcon from '@mui/icons-material/HomeFilled';
-import HomeIcon from '@mui/icons-material/Home';
-import PersonIcon from '@mui/icons-material/Person';
+import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from "@mui/icons-material/Person";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setUserAction } from "./reducers/userReducer";
@@ -27,6 +31,9 @@ import noteService from "./services/notes";
 import store from "./store";
 import { useEffect } from "react";
 import ProfilePage from "./pages/ProfilePage";
+
+
+import YouTubeTest from "./components/YouTubeTest";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -51,10 +58,14 @@ const App = () => {
     <Router>
       <div>
         <Link style={padding} to="/">
-          <HomeIcon/>
+          <HomeIcon />
         </Link>
 
         <ProfileMenu />
+
+        <Link style={padding} to="/new-note">
+          <AddIcon />
+        </Link>
 
         <Link style={padding} to="/account">
           account
@@ -63,13 +74,17 @@ const App = () => {
         {/* <Account /> */}
       </div>
 
-      <Routes>
-        <Route path="/" element={<NotesList/>}/>
-        <Route path="/users/:id" element={<ProfilePage/>}/>
-        <Route path="/account" element={<LoginPage/>}/>
-        <Route path="/notes" element={<NotesByUrlPage/>}/>
+      <YouTubeTest />
 
-        <Route path='/login' element={<LoginPageTwo />}/>
+      <Routes>
+        <Route path="/" element={<NotesList />} />
+        <Route path="/users/:id" element={<ProfilePage />} />
+        <Route path="/account" element={<LoginPage />} />
+        <Route path="/notes" element={<NotesByUrlPage />} />
+
+        <Route path="/login" element={<LoginPageTwo />} />
+
+        <Route path="/new-note" element={<NewNotePage />} />
       </Routes>
     </Router>
   );

@@ -85,7 +85,7 @@ const ProfileMenu = () => {
         }}
       >
         {currentUser && (
-          <>
+          <div>
             {/* User info header */}
             <Box sx={{ px: 2, py: 1.5 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -130,7 +130,7 @@ const ProfileMenu = () => {
               </ListItemIcon>
               <ListItemText>Log Out</ListItemText>
             </MenuItem>
-          </>
+          </div>
         )}
 
         {!currentUser && (

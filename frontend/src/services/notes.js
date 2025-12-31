@@ -47,8 +47,14 @@ const getPublicByUrl = (url) => {
 }
 
 const deleteNote = async id => {
-  const response = await axios.delete(`${ baseUrl }/${id}`)
+  const response = await axios.delete(`${baseUrl}/${id}`)
   return response.data
 }
 
-export default { getAll, getAllPublic, getPublicByUrl, create, update, setToken, deleteNote }
+const searchUrls = async key => {
+  const response = await axios.get(`${baseUrl}/urls?search=${key}`)
+  console.log('urls found', response.data)
+  return response.data
+}
+
+export default { getAll, getAllPublic, getPublicByUrl, create, update, setToken, deleteNote, searchUrls }
