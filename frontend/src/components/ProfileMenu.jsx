@@ -20,6 +20,8 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetUserAction } from '../reducers/userReducer'
 
+import { toggleTheme } from '../reducers/themeReducer'  
+
 const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null)
   const currentUser = useSelector(state => state.user)
@@ -52,6 +54,13 @@ const ProfileMenu = () => {
     navigate('/account')
     handleClose()
   }
+
+  const handleToggleTheme = () => {  // Add this function
+    dispatch(toggleTheme())
+    handleClose()
+  }
+
+  const themeMode = useSelector(state => state.theme)  // Add this
 
   return (
     <>
@@ -115,11 +124,13 @@ const ProfileMenu = () => {
               <ListItemText>View Profile</ListItemText>
             </MenuItem>
 
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleToggleTheme}>  {/* Change from handleClose to handleToggleTheme */}
               <ListItemIcon>
                 <DarkModeIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Dark Mode</ListItemText>
+              <ListItemText>
+                {themeMode === 'light' ? 'Dark Mode' : 'Light Mode'}  {/* Show current state */}
+              </ListItemText>
             </MenuItem>
 
             <Divider />

@@ -26,8 +26,10 @@ const getVideoInfo = async (url) => {
     return null
   }
 
+  console.log('video id', videoId)
+
   try {
-    const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=7lCDEYXw3mM&key=${VITE_YOUTUBE_API_KEY}
+    const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${VITE_YOUTUBE_API_KEY}
      &part=snippet,contentDetails,statistics,status`)
 
     const data = await response.json()

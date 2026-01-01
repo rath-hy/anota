@@ -35,6 +35,12 @@ import ProfilePage from "./pages/ProfilePage";
 
 import YouTubeTest from "./components/YouTubeTest";
 
+
+import { ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import { lightTheme, darkTheme } from './theme'
+
+
 const App = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user);
@@ -54,39 +60,48 @@ const App = () => {
     padding: 5,
   };
 
+  const themeMode = useSelector((state) => state.theme)  // Add this
+  const theme = themeMode === 'light' ? lightTheme : darkTheme  // Add this
+
   return (
-    <Router>
-      <div>
-        <Link style={padding} to="/">
-          <HomeIcon />
-        </Link>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
 
-        <ProfileMenu />
+      <Router>
+        <div>
+          <Link style={padding} to="/">
+            <HomeIcon />
+          </Link>
 
-        <Link style={padding} to="/new-note">
-          <AddIcon />
-        </Link>
+          <ProfileMenu />
 
-        <Link style={padding} to="/account">
-          account
-        </Link>
+          <Link style={padding} to="/new-note">
+            <AddIcon />
+          </Link>
 
-        {/* <Account /> */}
-      </div>
+          <Link style={padding} to="/account">
+            account
+          </Link>
 
-      <YouTubeTest />
+          {/* <Account /> */}
+        </div>
 
-      <Routes>
-        <Route path="/" element={<NotesList />} />
-        <Route path="/users/:id" element={<ProfilePage />} />
-        <Route path="/account" element={<LoginPage />} />
-        <Route path="/notes" element={<NotesByUrlPage />} />
+        {/* <YouTubeTest /> */}
 
-        <Route path="/login" element={<LoginPageTwo />} />
+        <Routes>
+          <Route path="/" element={<NotesList />} />
+          <Route path="/users/:id" element={<ProfilePage />} />
+          <Route path="/account" element={<LoginPage />} />
+          <Route path="/notes" element={<NotesByUrlPage />} />
 
-        <Route path="/new-note" element={<NewNotePage />} />
-      </Routes>
-    </Router>
+          <Route path="/login" element={<LoginPageTwo />} />
+
+          <Route path="/new-note" element={<NewNotePage />} />
+        </Routes>
+      </Router>
+
+    </ThemeProvider>
+    
   );
 };
 

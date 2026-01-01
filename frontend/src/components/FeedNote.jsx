@@ -1,5 +1,5 @@
 // components/FeedNote.jsx
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Card, 
   CardContent, 
@@ -12,37 +12,35 @@ import {
   Chip
 } from '@mui/material'
 import { 
-  Delete as DeleteIcon, 
   ExpandMore, 
   ExpandLess,
   OpenInNew as OpenInNewIcon
 } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import noteService from '../services/notes'
+import youtubeService from '../services/youtube'
 
 const FeedNote = ({ note, onDelete }) => {
   const [expanded, setExpanded] = useState(true)
   const [showFullContent, setShowFullContent] = useState(false)
-  const currentUser = useSelector(state => state.user)
+  const [youTubeUrlInfo, setYouTubeUrlInfo] = useState(null)
   const navigate = useNavigate()
   
-  const canDelete = currentUser && note.user.id === currentUser.id
   const isLongContent = note.content.length > 300
   const displayContent = (isLongContent && !showFullContent) 
     ? note.content.substring(0, 300) + '...' 
     : note.content
 
-  const handleDelete = async () => {
-    if (window.confirm(`Delete this comment?`)) {
-      try {
-        await noteService.deleteNote(note.id)
-        onDelete && onDelete(note.id)
-      } catch (error) {
-        console.error('Error deleting note', error)
+  useEffect(() => {
+    const fetchYouTubeInfo = async () => {
+      const info = await youtubeService.getVideoInfo(note.url)
+      if (info) {
+        setYouTubeUrlInfo(info)
       }
     }
-  }
+
+    fetchYouTubeInfo()
+  }, [note.url])
 
   const stringToColor = (string) => {
     let hash = 0
@@ -59,6 +57,11 @@ const FeedNote = ({ note, onDelete }) => {
     } catch {
       return url
     }
+  }
+
+  const truncateTitle = (title, maxLength = 50) => {
+    if (title.length <= maxLength) return title
+    return title.substring(0, maxLength) + '...'
   }
 
   return (
@@ -139,6 +142,26 @@ const FeedNote = ({ note, onDelete }) => {
             <OpenInNewIcon fontSize="small" sx={{ fontSize: 16 }} />
           </IconButton>
 
+          {youTubeUrlInfo && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  fontSize: '0.75rem',
+                  fontStyle: 'italic'
+                }}
+              >
+                "{truncateTitle(youTubeUrlInfo.snippet.title)}"
+              </Typography>
+              <Typography 
+                variant="caption" 
+                color="text.secondary"
+                sx={{ fontSize: '0.7rem' }}
+              >
+                by {youTubeUrlInfo.snippet.channelTitle}
+              </Typography>
+            </Box>
+          )}
         </Box>
 
         {/* Content */}
