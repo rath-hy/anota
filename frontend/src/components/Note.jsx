@@ -54,7 +54,7 @@ const Note = ({ note, userId, showUsername=true, showUrl=true, showGo=true, onDe
         }
 
         {showGo ? (
-          <button onClick={() => navigate(`notes?url=${encodeURIComponent(note.url)}`)}>
+          <button onClick={() => navigate(`/notes?url=${encodeURIComponent(note.url)}`)}>
             🔵
           </button>) : null
         }

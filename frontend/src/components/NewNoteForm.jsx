@@ -165,6 +165,11 @@ const NewNoteForm = ({ onNoteCreated, urlOptions }) => {
             id="outlined-basic" 
             label="Note" 
             variant="outlined" 
+            required
+            multiline
+            rows={4}
+            maxRows={12}
+            fullWidth
             value={content} 
             onChange={(e) => setContent(e.target.value)} />
         </div>
