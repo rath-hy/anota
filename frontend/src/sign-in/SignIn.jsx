@@ -1,22 +1,30 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Divider from '@mui/material/Divider';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
-import ForgotPassword from './components/ForgotPassword';
-import AppTheme from '../shared-theme/AppTheme';
-import ColorModeSelect from '../shared-theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
+import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import axios from 'axios'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { auth } from '../firebase'
+import { setUserAction } from '../reducers/userReducer'
+import noteService from '../services/notes'
+
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+// import Checkbox from '@mui/material/Checkbox'
+import CssBaseline from '@mui/material/CssBaseline'
+// import FormControlLabel from '@mui/material/FormControlLabel'
+// import Divider from '@mui/material/Divider'
+// import FormLabel from '@mui/material/FormLabel'
+// import FormControl from '@mui/material/FormControl'
+// import Link from '@mui/material/Link'
+// import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import MuiCard from '@mui/material/Card'
+import { styled } from '@mui/material/styles'
+// import ForgotPassword from './components/ForgotPassword'
+import AppTheme from '../shared-theme/AppTheme'
+import ColorModeSelect from '../shared-theme/ColorModeSelect'
+import { GoogleIcon } from './components/CustomIcons'
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -35,7 +43,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
     boxShadow:
       'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
   }),
-}));
+}))
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
@@ -50,69 +58,107 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     position: 'absolute',
     zIndex: -1,
     inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
     backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
   },
-}));
+}))
 
 export default function SignIn(props) {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [open, setOpen] = React.useState(false);
+  // Username/password login state - not needed for Google-only
+  // const [emailError, setEmailError] = React.useState(false)
+  // const [emailErrorMessage, setEmailErrorMessage] = React.useState('')
+  // const [passwordError, setPasswordError] = React.useState(false)
+  // const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('')
+  // const [open, setOpen] = React.useState(false)
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // Forgot password handlers - not needed for Google-only
+  // const handleClickOpen = () => {
+  //   setOpen(true)
+  // }
 
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
+  // const handleClose = () => {
+  //   setOpen(false)
+  // }
+
+  const handleGoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider()
+      const result = await signInWithPopup(auth, provider)
+
+      const idToken = await result.user.getIdToken()
+      const response = await axios.post('http://localhost:3001/api/login/google', { idToken })
+      
+      const user = response.data
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
+      dispatch(setUserAction(user))
+      noteService.setToken(user.token)
+
+      navigate('/')
+    } catch (error) {
+      console.error('Google login failed:', error)
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  }
 
-  const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
+  // Username/password login handler - not needed for Google-only
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault()
+  //   
+  //   if (!validateInputs()) {
+  //     return
+  //   }
 
-    let isValid = true;
+  //   const data = new FormData(event.currentTarget)
+  //   const username = data.get('email')
+  //   const password = data.get('password')
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
+  //   try {
+  //     const response = await axios.post('http://localhost:3001/api/login', {
+  //       username,
+  //       password
+  //     })
 
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
+  //     const user = response.data
+  //     window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
+  //     dispatch(setUserAction(user))
+  //     noteService.setToken(user.token)
 
-    return isValid;
-  };
+  //     navigate('/')
+  //   } catch (error) {
+  //     console.error('Login failed:', error)
+  //     setPasswordError(true)
+  //     setPasswordErrorMessage('Invalid username or password')
+  //   }
+  // }
+
+  // Validation - not needed for Google-only
+  // const validateInputs = () => {
+  //   const email = document.getElementById('email')
+  //   const password = document.getElementById('password')
+
+  //   let isValid = true
+
+  //   if (!email.value) {
+  //     setEmailError(true)
+  //     setEmailErrorMessage('Please enter your username.')
+  //     isValid = false
+  //   } else {
+  //     setEmailError(false)
+  //     setEmailErrorMessage('')
+  //   }
+
+  //   if (!password.value || password.value.length < 6) {
+  //     setPasswordError(true)
+  //     setPasswordErrorMessage('Password must be at least 6 characters long.')
+  //     isValid = false
+  //   } else {
+  //     setPasswordError(false)
+  //     setPasswordErrorMessage('')
+  //   }
+
+  //   return isValid
+  // }
 
   return (
     <AppTheme {...props}>
@@ -120,15 +166,20 @@ export default function SignIn(props) {
       <SignInContainer direction="column" justifyContent="space-between">
         <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
         <Card variant="outlined">
-          <SitemarkIcon />
           <Typography
             component="h1"
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Sign in
+            Welcome to Anota
           </Typography>
-          <Box
+          
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+            See what your friends are reading across the web
+          </Typography>
+
+          {/* Username/password form - not needed for Google-only */}
+          {/* <Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
@@ -140,15 +191,15 @@ export default function SignIn(props) {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="email">Username</FormLabel>
               <TextField
                 error={emailError}
                 helperText={emailErrorMessage}
                 id="email"
-                type="email"
+                type="text"
                 name="email"
-                placeholder="your@email.com"
-                autoComplete="email"
+                placeholder="email"
+                autoComplete="username"
                 autoFocus
                 required
                 fullWidth
@@ -166,7 +217,6 @@ export default function SignIn(props) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                autoFocus
                 required
                 fullWidth
                 variant="outlined"
@@ -182,7 +232,6 @@ export default function SignIn(props) {
               type="submit"
               fullWidth
               variant="contained"
-              onClick={validateInputs}
             >
               Sign in
             </Button>
@@ -196,25 +245,21 @@ export default function SignIn(props) {
               Forgot your password?
             </Link>
           </Box>
-          <Divider>or</Divider>
+          <Divider>or</Divider> */}
+
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button
               fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Google')}
+              variant="contained"
+              onClick={handleGoogleLogin}
               startIcon={<GoogleIcon />}
+              size="large"
             >
-              Sign in with Google
+              Continue with Google
             </Button>
-            {/* <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Facebook')}
-              startIcon={<FacebookIcon />}
-            >
-              Sign in with Facebook
-            </Button> */}
-            <Typography sx={{ textAlign: 'center' }}>
+            
+            {/* Sign up link - not needed since Google handles it */}
+            {/* <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
               <Link
                 href="/material-ui/getting-started/templates/sign-in/"
@@ -223,10 +268,10 @@ export default function SignIn(props) {
               >
                 Sign up
               </Link>
-            </Typography>
+            </Typography> */}
           </Box>
         </Card>
       </SignInContainer>
     </AppTheme>
-  );
+  )
 }

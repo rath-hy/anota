@@ -8,23 +8,23 @@ import {
   ListItemText,
   Divider,
   Typography,
-  Box
+  Box,
+  Button
 } from '@mui/material'
 import { 
   Person as PersonIcon, 
   DarkMode as DarkModeIcon, 
-  Logout as LogoutIcon,
-  Login as LoginIcon
+  Logout as LogoutIcon
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { resetUserAction } from '../reducers/userReducer'
-
-import { toggleTheme } from '../reducers/themeReducer'  
+import { toggleTheme } from '../reducers/themeReducer'
 
 const ProfileMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null)
   const currentUser = useSelector(state => state.user)
+  const themeMode = useSelector(state => state.theme)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   
@@ -52,16 +52,35 @@ const ProfileMenu = () => {
 
   const handleLogin = () => {
     navigate('/account')
-    handleClose()
   }
 
-  const handleToggleTheme = () => {  // Add this function
+  const handleToggleTheme = () => {
     dispatch(toggleTheme())
     handleClose()
   }
 
-  const themeMode = useSelector(state => state.theme)  // Add this
+  // If not logged in, show login button
+  if (!currentUser) {
+    return (
+      <Button
+        variant="contained"
+        onClick={handleLogin}
+        sx={{
+          backgroundColor: themeMode === 'light' ? 'black' : 'white',
+          color: themeMode === 'light' ? 'white' : 'black',
+          '&:hover': {
+            backgroundColor: themeMode === 'light' ? '#333' : '#e0e0e0',
+          },
+          textTransform: 'none',
+          fontWeight: 500
+        }}
+      >
+        Log In
+      </Button>
+    )
+  }
 
+  // If logged in, show avatar with menu
   return (
     <>
       <IconButton 
@@ -69,7 +88,7 @@ const ProfileMenu = () => {
         sx={{ p: 0 }}
       >
         <Avatar 
-          src={currentUser?.photoUrl}
+          src={currentUser?.photoURL}
           alt={currentUser?.username}
           sx={{ width: 32, height: 32 }}
         >
@@ -93,65 +112,52 @@ const ProfileMenu = () => {
           sx: { width: 250, mt: 1 }
         }}
       >
-        {currentUser && (
-          <div>
-            {/* User info header */}
-            <Box sx={{ px: 2, py: 1.5 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Avatar 
-                  src={currentUser.photoURL}
-                  sx={{ width: 40, height: 40 }}
-                >
-                  {currentUser.username[0].toUpperCase()}
-                </Avatar>
-                <Box>
-                  <Typography variant="body2" fontWeight={600}>
-                    {currentUser.name}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    u/{currentUser.username}
-                  </Typography>
-                </Box>
-              </Box>
+        {/* User info header */}
+        <Box sx={{ px: 2, py: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Avatar 
+              src={currentUser.photoURL}
+              sx={{ width: 40, height: 40 }}
+            >
+              {currentUser.username[0].toUpperCase()}
+            </Avatar>
+            <Box>
+              <Typography variant="body2" fontWeight={600}>
+                {currentUser.name}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                u/{currentUser.username}
+              </Typography>
             </Box>
-            
-            <Divider />
+          </Box>
+        </Box>
+        
+        <Divider />
 
-            <MenuItem onClick={handleViewProfile}>
-              <ListItemIcon>
-                <PersonIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>View Profile</ListItemText>
-            </MenuItem>
+        <MenuItem onClick={handleViewProfile}>
+          <ListItemIcon>
+            <PersonIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>View Profile</ListItemText>
+        </MenuItem>
 
-            <MenuItem onClick={handleToggleTheme}>  {/* Change from handleClose to handleToggleTheme */}
-              <ListItemIcon>
-                <DarkModeIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>
-                {themeMode === 'light' ? 'Dark Mode' : 'Light Mode'}  {/* Show current state */}
-              </ListItemText>
-            </MenuItem>
+        <MenuItem onClick={handleToggleTheme}>
+          <ListItemIcon>
+            <DarkModeIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>
+            {themeMode === 'light' ? 'Dark Mode' : 'Light Mode'}
+          </ListItemText>
+        </MenuItem>
 
-            <Divider />
+        <Divider />
 
-            <MenuItem onClick={handleLogout}>
-              <ListItemIcon>
-                <LogoutIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Log Out</ListItemText>
-            </MenuItem>
-          </div>
-        )}
-
-        {!currentUser && (
-          <MenuItem onClick={handleLogin}>
-            <ListItemIcon>
-              <LoginIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Log In</ListItemText>
-          </MenuItem>
-        )}
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Log Out</ListItemText>
+        </MenuItem>
       </Menu>
     </>
   )

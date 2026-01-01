@@ -5,7 +5,6 @@ import Note from "../components/Note";
 
 import NewNoteForm from "../components/NewNoteForm";
 
-import GoogleLoginButton from "../components/GoogleLoginButton";
 
 import FeedNote from "../components/FeedNote";
 
@@ -31,7 +30,6 @@ const NotesList = () => {
 
   return (
     <div>
-      <GoogleLoginButton />
 
       {/* <NewNoteForm onNoteCreated={handleNoteCreated} /> */}
 

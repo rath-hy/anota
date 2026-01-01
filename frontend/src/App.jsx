@@ -22,6 +22,8 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { lightTheme, darkTheme } from './theme'
 
+import SignIn from "./sign-in/SignIn"
+
 const App = () => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user)
@@ -80,7 +82,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<NotesList />} />
           <Route path="/users/:id" element={<ProfilePage />} />
-          <Route path="/account" element={<LoginPage />} />
+          <Route path="/account" element={<SignIn />} />
           <Route path="/notes" element={<NotesByUrlPage />} />
           <Route path="/login" element={<LoginPageTwo />} />
           <Route path="/new-note" element={<NewNotePage />} />
