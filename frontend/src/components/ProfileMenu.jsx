@@ -14,6 +14,7 @@ import {
 import { 
   Person as PersonIcon, 
   DarkMode as DarkModeIcon, 
+  LightMode as LightModeIcon,
   Logout as LogoutIcon
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
@@ -143,7 +144,7 @@ const ProfileMenu = () => {
 
         <MenuItem onClick={handleToggleTheme}>
           <ListItemIcon>
-            <DarkModeIcon fontSize="small" />
+            {themeMode === 'light' ? <DarkModeIcon fontSize='small' /> : <LightModeIcon fontSize='small'/>}
           </ListItemIcon>
           <ListItemText>
             {themeMode === 'light' ? 'Dark Mode' : 'Light Mode'}

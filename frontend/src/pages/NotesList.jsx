@@ -7,9 +7,11 @@ import NewNoteForm from "../components/NewNoteForm";
 
 
 import FeedNote from "../components/FeedNote";
+import { useSelector } from "react-redux";
 
 const NotesList = () => {
   const [notes, setNotes] = useState([]);
+  const user = useSelector(state => state.user)
 
   const fetchNotes = async () => {
     try {

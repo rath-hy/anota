@@ -7,7 +7,7 @@ const { Op } = require('sequelize')
 router.get('/', async (req, res) => {
   const includeOptions = {
     model: User,
-    attributes: ['id', 'username']
+    attributes: ['id', 'username', 'name']
   }
 
   const where = {}

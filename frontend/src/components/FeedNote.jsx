@@ -12,11 +12,13 @@ import {
   Chip
 } from '@mui/material'
 import { 
+  Delete as DeleteIcon, 
   ExpandMore, 
   ExpandLess,
   OpenInNew as OpenInNewIcon
 } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import noteService from '../services/notes'
 import youtubeService from '../services/youtube'
 
@@ -24,12 +26,16 @@ const FeedNote = ({ note, onDelete }) => {
   const [expanded, setExpanded] = useState(true)
   const [showFullContent, setShowFullContent] = useState(false)
   const [youTubeUrlInfo, setYouTubeUrlInfo] = useState(null)
+  const currentUser = useSelector(state => state.user)
   const navigate = useNavigate()
   
+  const canDelete = currentUser && note.user.id === currentUser.id
   const isLongContent = note.content.length > 300
   const displayContent = (isLongContent && !showFullContent) 
     ? note.content.substring(0, 300) + '...' 
     : note.content
+  
+  console.log('note seen by feednote', note.user)
 
   useEffect(() => {
     const fetchYouTubeInfo = async () => {
@@ -41,6 +47,17 @@ const FeedNote = ({ note, onDelete }) => {
 
     fetchYouTubeInfo()
   }, [note.url])
+
+  const handleDelete = async () => {
+    if (window.confirm(`Delete this comment?`)) {
+      try {
+        await noteService.deleteNote(note.id)
+        onDelete && onDelete(note.id)
+      } catch (error) {
+        console.error('Error deleting note', error)
+      }
+    }
+  }
 
   const stringToColor = (string) => {
     let hash = 0
@@ -100,7 +117,7 @@ const FeedNote = ({ note, onDelete }) => {
                 '&:hover': { textDecoration: 'underline' }
               }}
             >
-              {note.user.username}
+              {note.user.name}
             </Typography>
           </Link>
           
@@ -161,6 +178,17 @@ const FeedNote = ({ note, onDelete }) => {
                 by {youTubeUrlInfo.snippet.channelTitle}
               </Typography>
             </Box>
+          )}
+
+          {onDelete && canDelete && (
+            <IconButton 
+              size="small" 
+              onClick={handleDelete}
+              sx={{ ml: 'auto', p: 0.5 }}
+              color="error"
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
           )}
         </Box>
 
