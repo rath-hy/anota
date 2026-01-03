@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import { Container, Box, Avatar, Typography, Divider } from '@mui/material'
+import { Container, Box, Avatar, Typography, Divider, Button } from '@mui/material'
 import ProfileNote from '../components/ProfileNote'
 
 const baseUrl = 'http://localhost:3001/api/users'
@@ -62,6 +62,8 @@ const TheirPage = () => {
           </Box>
         </Box>
       </Box>
+
+      <Button variant='contained'>Follow</Button>
 
       <Divider sx={{ mb: 3 }} />
 
