@@ -24,7 +24,17 @@ const unfollow = async (userIdToUnfollow) => {
   return response.data
 }
 
+const getFollowing = async (id) => {
+  const config = {
+    headers: { Authorization: store.getState().token }
+  }
+
+  const response = await axios.get(`${baseUrl}/${id}`, {}, config)
+  return response.data.Following
+}
+
 export default { 
   follow, 
-  unfollow 
+  unfollow,
+  getFollowing 
 }

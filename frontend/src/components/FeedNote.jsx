@@ -34,8 +34,6 @@ const FeedNote = ({ note, onDelete }) => {
   const displayContent = (isLongContent && !showFullContent) 
     ? note.content.substring(0, 300) + '...' 
     : note.content
-  
-  console.log('note seen by feednote', note.user)
 
   useEffect(() => {
     const fetchYouTubeInfo = async () => {
