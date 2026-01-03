@@ -6,9 +6,29 @@ import ProfileNote from '../components/ProfileNote'
 
 const baseUrl = 'http://localhost:3001/api/users'
 
+import userService from '../services/users'
+
+import { useSelector } from 'react-redux'
+
 const TheirPage = () => {
   const id = useParams().id
   const [user, setUser] = useState(null)
+
+  const currentUser = useSelector(state => state.user)
+
+  const handleFollow = async () => {
+    await userService.follow(id)
+    const response = await axios.get(`${baseUrl}/${id}?public=true`)
+    setUser(response.data)
+  }
+
+  const handleUnfollow = async () => {
+    await userService.unfollow(id)
+    const response = await axios.get(`${baseUrl}/${id}?public=true`)
+    setUser(response.data)
+  }
+
+  console.log('their user', user)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -38,6 +58,9 @@ const TheirPage = () => {
     )
   }
 
+  const isFollowing = user.Followers?.some(u => u.id === currentUser.id)
+
+
   return (
     <Container maxWidth="md" sx={{ mt: 3 }}>
       {/* Profile Header */}
@@ -63,8 +86,11 @@ const TheirPage = () => {
         </Box>
       </Box>
 
-      <Button variant='contained'>Follow</Button>
-
+      {isFollowing 
+        ? (<Button variant='contained' onClick={handleUnfollow}>Unfollow</Button>) 
+        : (<Button variant='contained' onClick={handleFollow}>Follow</Button>)
+      }
+    
       <Divider sx={{ mb: 3 }} />
 
       {/* Notes List */}
