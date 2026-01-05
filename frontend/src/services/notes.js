@@ -48,10 +48,14 @@ const deleteNote = async id => {
   return response.data
 }
 
-const searchUrls = async key => {
-  const response = await axios.get(`${baseUrl}/urls?search=${key}`)
-  console.log('urls found', response.data)
+const getUniqueUrls = async () => {
+  const response = await axios.get(`${baseUrl}/urls`)
   return response.data
 }
 
-export default { getAll, getAllPublic, getPublicByUrl, create, update, setToken, deleteNote, searchUrls }
+const searchUrls = async key => {
+  const response = await axios.get(`${baseUrl}/urls?search=${key}`)
+  return response.data
+}
+
+export default { getAll, getAllPublic, getPublicByUrl, create, update, setToken, deleteNote, getUniqueUrls, searchUrls }

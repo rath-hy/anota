@@ -1,33 +1,73 @@
-import { useState } from "react";
-import noteService from "../services/notes";
+import { useState, useEffect } from "react"
+import { useNavigate } from 'react-router-dom'
+import noteService from "../services/notes"
+import { Box, Autocomplete, TextField, IconButton } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 
-//passing in setNotes seems iffy
-const UrlSearchBar = ({ setNotes }) => {
-  const [url, setUrl] = useState("");
+const UrlSearchBar = () => {
+  const [url, setUrl] = useState("")
+  const [urlOptions, setUrlOptions] = useState([])
+  const navigate = useNavigate()
 
-  const handleSearch = async (event) => {
-    event.preventDefault();
-    const notes = await noteService.getPublicByUrl(url);
-    setNotes(notes);
+  const handleSearch = () => {
+    if (url) {
+      navigate(`/notes?url=${encodeURIComponent(url)}`)
+    }
+  }
 
-    // setUrl('')
-  };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
+  const fetchUrlOptions = async () => {
+    try {
+      const urlOptionsData = await noteService.getUniqueUrls()
+      setUrlOptions(urlOptionsData)
+    } catch (error) {
+      console.error('Error fetching URLs:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchUrlOptions()
+  }, [])
 
   return (
-    <div>
-      <h3>Search comments by URL</h3>
-      <form onSubmit={handleSearch}>
-        <input
-          type="text"
+    <Box sx={{ mb: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Autocomplete 
+          freeSolo
+          fullWidth
+          options={urlOptions}
           value={url}
-          name="search"
-          onChange={({ target }) => setUrl(target.value)}
+          onChange={(event, newValue) => setUrl(newValue || '')} 
+          onInputChange={(event, newInputValue) => setUrl(newInputValue)}
+          renderInput={(params) => (
+            <TextField 
+              {...params}
+              label="Search for URLs with notes"
+              placeholder="e.g., youtube.com, facebook.com"
+              onKeyDown={handleKeyDown}
+            />
+          )}
         />
 
-        <button type="submit">search</button>
-      </form>
-    </div>
-  );
-};
+        <IconButton 
+          onClick={handleSearch}
+          color="primary"
+          sx={{ 
+            bgcolor: 'primary.main',
+            color: 'white',
+            '&:hover': { bgcolor: 'primary.dark' }
+          }}
+        >
+          <SearchIcon />
+        </IconButton>
+      </Box>
+    </Box>
+  )
+}
 
-export default UrlSearchBar;
+export default UrlSearchBar
