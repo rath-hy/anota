@@ -1,77 +1,102 @@
-import { useState, useEffect } from "react";
-import noteService from "../services/notes";
+import { useState, useEffect } from "react"
+import noteService from "../services/notes"
 import userService from '../services/users'
-import UrlSearchBar from "../components/UrlSearchBar";
-import Note from "../components/Note";
-
-import NewNoteForm from "../components/NewNoteForm";
-
-
-import FeedNote from "../components/FeedNote";
-import { useSelector } from "react-redux";
-
-import { Typography } from "@mui/material";
+import UrlSearchBar from "../components/UrlSearchBar"
+import FeedNote from "../components/FeedNote"
+import { useSelector } from "react-redux"
+import { Container, Box, Tabs, Tab, Typography } from "@mui/material"
 
 const NotesList = () => {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState([])
+  const [activeTab, setActiveTab] = useState(0)
   const user = useSelector(state => state.user)
   const [following, setFollowing] = useState([])
 
   const fetchNotes = async () => {
     try {
-      const response = await noteService.getAllPublic();
-      setNotes(response);
-    } catch (error) {}
-  };
+      const response = await noteService.getAllPublic()
+      setNotes(response)
+    } catch (error) {
+      console.error('Error fetching notes:', error)
+    }
+  }
 
   const fetchFollowing = async () => {
-    if (!user) {
-      return null
-    }
+    if (!user) return
 
     try {
-       const followingData = await userService.getFollowing(user.id)
-       setFollowing(followingData)
-       console.log('following', followingData)
+      const followingData = await userService.getFollowing(user.id)
+      console.log('followingData', followingData)
+      setFollowing(followingData)
     } catch (error) {
       console.error(error)
     }
-
   }
 
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    fetchNotes()
+  }, [])
 
   useEffect(() => {
-    fetchFollowing()
-  }, [user]);
+    if (user) {
+      fetchFollowing()
+    }
+  }, [user?.id])
 
-  console.log("fetched notes", notes);
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue)
+  }
 
-  const handleNoteCreated = () => {
-    fetchNotes();
-  };
+  const followingNotes = notes.filter(note => 
+    following.some(u => u.id === note.user.id)
+  )
 
   return (
-    <div>
+    <Container maxWidth="md">
+      <UrlSearchBar />
 
-      {/* <NewNoteForm onNoteCreated={handleNoteCreated} /> */}
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+        <Tabs value={activeTab} onChange={handleTabChange}>
+          <Tab label="All" />
+          <Tab label="Following" />
+        </Tabs>
+      </Box>
 
-      <UrlSearchBar setNotes={setNotes} />
+      {/* All Tab */}
+      {activeTab === 0 && (
+        <Box>
+          {notes.length === 0 ? (
+            <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+              No notes yet
+            </Typography>
+          ) : (
+            notes.map((note) => (
+              <FeedNote key={note.id} note={note} />
+            ))
+          )}
+        </Box>
+      )}
 
-      <Typography variant="h5">Following Notes</Typography>
-      {notes.filter(note => following.some(u => u.id === note.user.id)).map((note) => (
-        <FeedNote key={note.id} note={note} />
-      ))}
-      
-      <Typography variant="h5">All Notes</Typography>
-      {notes.map((note) => (
-        // <Note key={note.id} note={note} userId={note.user.id} />
-        <FeedNote key={note.id} note={note} />
-      ))}
-    </div>
-  );
-};
+      {/* Following Tab */}
+      {activeTab === 1 && (
+        <Box>
+          {!user ? (
+            <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+              Log in to see notes from people you follow
+            </Typography>
+          ) : followingNotes.length === 0 ? (
+            <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+              No notes from people you follow yet
+            </Typography>
+          ) : (
+            followingNotes.map((note) => (
+              <FeedNote key={note.id} note={note} />
+            ))
+          )}
+        </Box>
+      )}
+    </Container>
+  )
+}
 
-export default NotesList;
+export default NotesList

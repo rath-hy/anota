@@ -78,16 +78,19 @@ const App = () => {
             </Box>
           </Toolbar>
         </AppBar>
-
-        <Routes>
-          <Route path="/" element={<NotesList />} />
-          <Route path="/users/:id" element={<ProfilePage />} />
-          <Route path="/account" element={<SignIn />} />
-          <Route path="/notes" element={<NotesByUrlPage />} />
-          <Route path="/login" element={<LoginPageTwo />} />
-          <Route path="/new-note" element={<NewNotePage />} />
-        </Routes>
+        
+        <Box sx={{ pt: 3 }}>  
+          <Routes>
+            <Route path="/" element={<NotesList />} />
+            <Route path="/users/:id" element={<ProfilePage />} />
+            <Route path="/account" element={<SignIn />} />
+            <Route path="/notes" element={<NotesByUrlPage />} />
+            <Route path="/login" element={<LoginPageTwo />} />
+            <Route path="/new-note" element={<NewNotePage />} />
+          </Routes>
+        </Box>
       </Router>
+
     </ThemeProvider>
   )
 }
