@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 const NewNotePage = () => {
   const [notes, setNotes] = useState([]);
 
+  const searchParams = new URLSearchParams(window.location.search)
+  const prefilledUrl = searchParams.get('url')
+
   const fetchNotes = async () => {
     try {
       const response = await noteService.getAllPublic();
@@ -35,7 +38,7 @@ const NewNotePage = () => {
 
   return (
     <div>
-      <NewNoteForm onNoteCreated={handleNoteCreated} urlOptions={uniqueUrls}/>
+      <NewNoteForm onNoteCreated={handleNoteCreated} urlOptions={uniqueUrls} prefilledUrl={prefilledUrl}/>
     </div>
   )
 }

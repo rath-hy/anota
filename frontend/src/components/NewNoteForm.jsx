@@ -14,10 +14,10 @@ import { Typography } from "@mui/material";
 // import TextField from "@mui/material";
 // import Autocomplete from "@mui/material";
 
-const NewNoteForm = ({ onNoteCreated, urlOptions }) => {
+const NewNoteForm = ({ onNoteCreated, urlOptions, prefilledUrl }) => {
   const [username, setUsername] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = prefilledUrl ? useState(prefilledUrl) : useState("");
   const [content, setContent] = useState("");
   const [date, setDate] = useState("");
   const [message, setMessage] = useState(null);
