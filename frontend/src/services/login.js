@@ -1,5 +1,6 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/api/login";
+import config from '../config'
+const baseUrl = `${config.API_URL}/api/login`
 
 import { setUserAction } from "../reducers/userReducer";
 

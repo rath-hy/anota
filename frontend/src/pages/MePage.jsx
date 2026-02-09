@@ -12,7 +12,8 @@ import {
 } from '@mui/material'
 import ProfileNote from "../components/ProfileNote"
 
-const baseUrl = "http://localhost:3001/api/users"
+import config from '../config'
+const baseUrl = `${config.API_URL}/api/users`
 
 const MePage = () => {
   const id = useParams().id

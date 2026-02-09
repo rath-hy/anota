@@ -25,6 +25,7 @@ import { styled } from '@mui/material/styles'
 import AppTheme from '../shared-theme/AppTheme'
 import ColorModeSelect from '../shared-theme/ColorModeSelect'
 import { GoogleIcon } from './components/CustomIcons'
+import config from '../config'
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -88,7 +89,7 @@ export default function SignIn(props) {
       const result = await signInWithPopup(auth, provider)
 
       const idToken = await result.user.getIdToken()
-      const response = await axios.post('http://localhost:3001/api/login/google', { idToken })
+      const response = await axios.post(`${config.API_URL}/login/google`, { idToken })
       
       const user = response.data
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))

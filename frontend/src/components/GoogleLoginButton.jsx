@@ -9,6 +9,7 @@ import noteService from '../services/notes'
 
 import { Button } from '@mui/material'
 import GoogleIcon from '@mui/icons-material/Google'
+import config from '../config'
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate()
@@ -23,7 +24,7 @@ const GoogleLoginButton = () => {
       const idToken = await result.user.getIdToken()
       console.log('logged in user id', idToken)
 
-      const GOOGLE_LOGIN_URL = 'http://localhost:3001/api/login/google'
+      const GOOGLE_LOGIN_URL = `${config.API_URL}/api/login/google`
 
       const response = await axios.post(GOOGLE_LOGIN_URL, {
         idToken

@@ -1,24 +1,30 @@
 const admin = require('firebase-admin')
-
 const express = require('express')
 const cors = require('cors') 
 const app = express()
 
-const { PORT } = require('./util/config')
+const { PORT, FRONTEND_URL } = require('./util/config')
 const { connectToDatabase, sequelize } = require('./util/db')
 
 const notesRouter = require('./controllers/notes')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 
-// Set emulator before initializing
-process.env.FIREBASE_AUTH_EMULATOR_HOST = '127.0.0.1:9099'
+// Only use Firebase emulator in development
+if (process.env.NODE_ENV === 'development') {
+  process.env.FIREBASE_AUTH_EMULATOR_HOST = '127.0.0.1:9099'
+}
 
 admin.initializeApp({
   projectId: 'anota-by-puthyrathy'
 })
 
-app.use(cors());
+// Configure CORS to allow requests from frontend
+app.use(cors({
+  origin: FRONTEND_URL,
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.use('/api/notes', notesRouter)
@@ -36,4 +42,3 @@ const start = async () => {
 }
 
 start()
-

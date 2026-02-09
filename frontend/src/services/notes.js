@@ -1,5 +1,6 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/api/notes' //MOVE ALL BASEURLS INTO CONFIG FILE
+import config from '../config'
+const baseUrl = `${config.API_URL}/api/notes`
 
 import store from '../store'
 import { setTokenAction } from '../reducers/tokenReducer'

@@ -3,6 +3,7 @@ const { Note, User } = require('../models')
 const tokenExtractor = require('../middleware/tokenExtractor')
 const { sequelize } = require('../util/db')
 const { Op } = require('sequelize')
+const { normalizeUrl } = require('../util/urlNormalizer')
 
 router.get('/', async (req, res) => {
   const includeOptions = {
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
   const where = {}
 
   if (req.query.url) {
-    where.url = req.query.url
+    where.url = normalizeUrl(req.query.url)
   }
 
   if (req.query.publicOnly === 'true') {
@@ -33,7 +34,7 @@ router.post('/', tokenExtractor, async (req, res) => {
   console.log(req.body)
   try {
     const user = await User.findByPk(req.decodedToken.id)
-    const note = await Note.create({...req.body, userId: user.id, date: new Date()})
+    const note = await Note.create({...req.body, url: normalizeUrl(req.body.url), userId: user.id, date: new Date()})
     return res.json(note)
   } catch(error) {
     return res.status(400).json({ error })

@@ -89,8 +89,7 @@ const App: React.FC = () => {
         gap: '8px',
         marginBottom: '16px'
       }}>
-        <img src="icon.png" style={{ width: '32px', height: '32px' }} />
-        <h2 style={{ margin: 0, fontSize: '20px' }}>Anota Notes</h2>
+        <h2 style={{ margin: 0, fontSize: '20px' }}>Anota</h2>
       </div>
       
       {loading && <p>Loading notes...</p>}
