@@ -10,8 +10,9 @@ const notesRouter = require('./controllers/notes')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 
-// Only use Firebase emulator in development
+// Configure Firebase based on environment
 if (process.env.NODE_ENV === 'development') {
+  // Development - use emulator
   process.env.FIREBASE_AUTH_EMULATOR_HOST = '127.0.0.1:9099'
   admin.initializeApp({
     projectId: 'anota-by-puthyrathy'
@@ -24,10 +25,6 @@ if (process.env.NODE_ENV === 'development') {
     projectId: 'anota-by-puthyrathy'
   })
 }
-
-admin.initializeApp({
-  projectId: 'anota-by-puthyrathy'
-})
 
 // Configure CORS to allow requests from frontend
 app.use(cors({
