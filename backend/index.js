@@ -13,6 +13,16 @@ const loginRouter = require('./controllers/login')
 // Only use Firebase emulator in development
 if (process.env.NODE_ENV === 'development') {
   process.env.FIREBASE_AUTH_EMULATOR_HOST = '127.0.0.1:9099'
+  admin.initializeApp({
+    projectId: 'anota-by-puthyrathy'
+  })
+} else {
+  // Production - use service account
+  const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON)
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    projectId: 'anota-by-puthyrathy'
+  })
 }
 
 admin.initializeApp({
