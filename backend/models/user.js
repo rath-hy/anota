@@ -25,10 +25,10 @@ User.init({
   },
   passwordHash: {
     type: DataTypes.STRING,
-    allowNull: true //change to false later
+    allowNull: true
   },
   photoUrl: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true
   }
 }, {
