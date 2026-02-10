@@ -89,7 +89,7 @@ export default function SignIn(props) {
       const result = await signInWithPopup(auth, provider)
 
       const idToken = await result.user.getIdToken()
-      const response = await axios.post(`${config.API_URL}api/login/google`, { idToken })
+      const response = await axios.post(`${config.API_URL}/api/login/google`, { idToken })
       
       const user = response.data
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
