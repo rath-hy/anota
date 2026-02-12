@@ -1,3 +1,5 @@
+import config from '../config'
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "fetchNotes") {
     // Call the async function
@@ -10,7 +12,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 async function fetchNotesFromAPI(pageUrl, sendResponse) {
   try {
-    const url = `http://localhost:3001/api/notes?url=${encodeURIComponent(pageUrl)}`;
+    const url = `${config.API_URL}/api/notes?url=${encodeURIComponent(pageUrl)}`;
     console.log("Fetching from:", url);
     
     const response = await fetch(url);

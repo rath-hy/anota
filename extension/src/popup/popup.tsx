@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import FeedNote from './components/FeedNote'
 import './popup.css'
+import config from '../config'
 
 interface Note {
   id: number
@@ -69,9 +70,8 @@ const App: React.FC = () => {
   }
 
   const handleCreateNote = () => {
-    // Open the new note page in a new tab with the current URL as a query parameter
     chrome.tabs.create({ 
-      url: `http://localhost:5173/new-note?url=${encodeURIComponent(currentUrl)}` 
+      url: `${config.FRONTEND_URL}/new-note?url=${encodeURIComponent(currentUrl)}` 
     })
   }
 
