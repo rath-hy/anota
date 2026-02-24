@@ -4,5 +4,13 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
+  ],
+
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://anota.puthyrathy.com/$1",
+      "permanent": true
+    }
   ]
 }

@@ -48,7 +48,7 @@ const UrlSearchBar = () => {
           onKeyDown={handleKeyDown}
           onFocus={() => setShowOptions(true)}
           onBlur={() => setTimeout(() => setShowOptions(false), 150)}
-          placeholder="Search for a URL with notes..."
+          placeholder="Search for a link..."
           style={{
             flex: 1,
             padding: '8px 10px',

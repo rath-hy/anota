@@ -5,6 +5,7 @@ import ProfileNote from '../components/ProfileNote'
 import config from '../config'
 import userService from '../services/users'
 import { useSelector } from 'react-redux'
+import { useTheme } from '@mui/material/styles'
 
 const baseUrl = `${config.API_URL}/api/users`
 const serifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', Times, serif"
@@ -13,8 +14,15 @@ const TheirPage = () => {
   const id = useParams().id
   const [user, setUser] = useState(null)
   const currentUser = useSelector(state => state.user)
+  const theme = useTheme()
+
+  const textColor = theme.palette.text.primary
+  const mutedColor = theme.palette.text.secondary
+  const borderColor = theme.palette.divider
+  const bgColor = theme.palette.background.default
 
   const handleFollow = async () => {
+    
     await userService.follow(id)
     const response = await axios.get(`${baseUrl}/${id}?public=true`)
     setUser(response.data)
@@ -42,7 +50,7 @@ const TheirPage = () => {
 
   if (!user) {
     return (
-      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px', fontFamily: serifFont }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px', fontFamily: serifFont, color: textColor }}>
         Loading...
       </div>
     )
@@ -68,24 +76,24 @@ const TheirPage = () => {
           }
         </div>
         <div>
-          <div style={{ fontFamily: serifFont, fontSize: '24px', fontWeight: 400 }}>{user.name}</div>
-          <div style={{ fontFamily: serifFont, fontSize: '18px', color: '#666' }}>u/{user.username}</div>
+          <div style={{ fontFamily: serifFont, fontSize: '24px', fontWeight: 400, color: textColor }}>{user.name}</div>
+          <div style={{ fontFamily: serifFont, fontSize: '18px', color: mutedColor }}>u/{user.username}</div>
           <div style={{ marginTop: '8px' }}>
-            <span style={{ fontFamily: serifFont, fontSize: '22px' }}>
+            <span style={{ fontFamily: serifFont, fontSize: '22px', color: textColor }}>
               <strong>{user.notes.length}</strong> public notes
             </span>
           </div>
         </div>
       </div>
 
-      {/* Follow button */}
+      {/* Follow / Unfollow button */}
       <button
         onClick={isFollowing ? handleUnfollow : handleFollow}
         style={{
           padding: '6px 16px',
-          border: '1px solid #1a1a1a',
-          backgroundColor: isFollowing ? '#fff' : '#1a1a1a',
-          color: isFollowing ? '#1a1a1a' : '#fff',
+          border: isFollowing ? '1px solid #cc0000' : `1px solid ${textColor}`,
+          backgroundColor: isFollowing ? '#cc0000' : textColor,
+          color: isFollowing ? '#fff' : bgColor,
           cursor: 'pointer',
           fontFamily: serifFont,
           fontSize: '16px',
@@ -96,11 +104,11 @@ const TheirPage = () => {
         {isFollowing ? 'Unfollow' : 'Follow'}
       </button>
 
-      <div style={{ borderTop: '1px solid #ccc', marginBottom: '24px' }} />
+      <div style={{ borderTop: `1px solid ${borderColor}`, marginBottom: '24px' }} />
 
       {/* Notes */}
       {user.notes.length === 0 ? (
-        <p style={{ fontFamily: serifFont, color: '#666', textAlign: 'center', marginTop: '32px' }}>
+        <p style={{ fontFamily: serifFont, color: mutedColor, textAlign: 'center', marginTop: '32px' }}>
           No public notes
         </p>
       ) : (

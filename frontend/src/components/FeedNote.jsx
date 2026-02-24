@@ -1,18 +1,17 @@
 // components/FeedNote.jsx
 import { useState, useEffect } from 'react'
-import { Collapse } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import noteService from '../services/notes'
 import youtubeService from '../services/youtube'
 import { useTheme } from '@mui/material/styles'
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@mui/icons-material/Delete'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const serifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', Times, serif"
 
 const FeedNote = ({ note, onDelete }) => {
   const [expanded, setExpanded] = useState(true)
-  const [showFullContent, setShowFullContent] = useState(false)
   const [youTubeUrlInfo, setYouTubeUrlInfo] = useState(null)
   const currentUser = useSelector(state => state.user)
   const navigate = useNavigate()
@@ -24,10 +23,6 @@ const FeedNote = ({ note, onDelete }) => {
   const borderColor = theme.palette.divider
   
   const canDelete = currentUser && note.user.id === currentUser.id
-  const isLongContent = note.content.length > 300
-  const displayContent = (isLongContent && !showFullContent) 
-    ? note.content.substring(0, 300) + '...' 
-    : note.content
 
   useEffect(() => {
     const fetchYouTubeInfo = async () => {
@@ -119,7 +114,7 @@ const FeedNote = ({ note, onDelete }) => {
                 }}
                 title="Expand"
               >
-                ⊕
+                <ExpandMoreIcon />
               </button>
             )}
           </div>
@@ -177,7 +172,6 @@ const FeedNote = ({ note, onDelete }) => {
                     marginLeft: 'auto',
                     fontSize: '16px',
                     fontFamily: serifFont,
-                    textDecoration: 'underline',
                   }}
                 >
                   <DeleteIcon />
@@ -186,7 +180,7 @@ const FeedNote = ({ note, onDelete }) => {
             </div>
 
             {/* Note body */}
-            <Collapse in={expanded}>
+            {expanded && (
               <div style={{ 
                 lineHeight: '1.6',
                 color: textColor,
@@ -195,27 +189,9 @@ const FeedNote = ({ note, onDelete }) => {
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-word',
               }}>
-                {displayContent}
+                {note.content}
               </div>
-              {isLongContent && (
-                <button
-                  onClick={() => setShowFullContent(!showFullContent)}
-                  style={{
-                    border: 'none',
-                    background: 'none',
-                    cursor: 'pointer',
-                    color: linkColor,
-                    padding: 0,
-                    marginTop: '4px',
-                    fontFamily: serifFont,
-                    fontSize: '14px',
-                    textDecoration: 'underline',
-                  }}
-                >
-                  {showFullContent ? 'Show less' : 'Read more'}
-                </button>
-              )}
-            </Collapse>
+            )}
           </div>
         </div>
       </div>

@@ -169,7 +169,7 @@ const NewNoteForm = ({ onNoteCreated, urlOptions, prefilledUrl }) => {
               borderRadius: 0,
             }}
           >
-            Submit Note
+            Create
           </button>
         </div>
       </form>
