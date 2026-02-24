@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import { Container, Box, Avatar, Typography, Divider, Button } from '@mui/material'
 import ProfileNote from '../components/ProfileNote'
-
 import config from '../config'
-const baseUrl = `${config.API_URL}/api/users`
-
 import userService from '../services/users'
-
 import { useSelector } from 'react-redux'
+
+const baseUrl = `${config.API_URL}/api/users`
+const serifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', Times, serif"
 
 const TheirPage = () => {
   const id = useParams().id
   const [user, setUser] = useState(null)
-
   const currentUser = useSelector(state => state.user)
 
   const handleFollow = async () => {
@@ -29,86 +26,89 @@ const TheirPage = () => {
     setUser(response.data)
   }
 
-  console.log('their user', user)
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = JSON.parse(localStorage.getItem('loggedNoteappUser'))?.token
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-
-        const response = await axios.get(`${baseUrl}/${id}?public=true`, config)
+        const cfg = { headers: { Authorization: `Bearer ${token}` } }
+        const response = await axios.get(`${baseUrl}/${id}?public=true`, cfg)
         setUser(response.data)
       } catch (error) {
         console.error('Error fetching user:', error)
       }
     }
-
     fetchUser()
   }, [id])
 
   if (!user) {
     return (
-      <Container maxWidth="md" sx={{ mt: 3 }}>
-        <Typography>Loading...</Typography>
-      </Container>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px', fontFamily: serifFont }}>
+        Loading...
+      </div>
     )
   }
 
   const isFollowing = user.Followers?.some(u => u.id === currentUser.id)
 
-
   return (
-    <Container maxWidth="md" sx={{ mt: 3 }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px' }}>
       {/* Profile Header */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-        <Avatar 
-          src={user.photoURL}
-          sx={{ width: 80, height: 80 }}
-        >
-          {user.username[0].toUpperCase()}
-        </Avatar>
-        <Box>
-          <Typography variant="h5" fontWeight={600}>
-            {user.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            u/{user.username}
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-            <Typography variant="body2">
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+        <div style={{
+          width: '80px', height: '80px',
+          borderRadius: '50%',
+          backgroundColor: '#ccc',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: serifFont, fontSize: '32px', color: '#fff',
+          overflow: 'hidden', flexShrink: 0,
+        }}>
+          {user.photoURL
+            ? <img src={user.photoURL} alt={user.username} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            : user.username[0].toUpperCase()
+          }
+        </div>
+        <div>
+          <div style={{ fontFamily: serifFont, fontSize: '24px', fontWeight: 400 }}>{user.name}</div>
+          <div style={{ fontFamily: serifFont, fontSize: '18px', color: '#666' }}>u/{user.username}</div>
+          <div style={{ marginTop: '8px' }}>
+            <span style={{ fontFamily: serifFont, fontSize: '22px' }}>
               <strong>{user.notes.length}</strong> public notes
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
+            </span>
+          </div>
+        </div>
+      </div>
 
-      {isFollowing 
-        ? (<Button variant='contained' onClick={handleUnfollow}>Unfollow</Button>) 
-        : (<Button variant='contained' onClick={handleFollow}>Follow</Button>)
-      }
-    
-      <Divider sx={{ mb: 3 }} />
+      {/* Follow button */}
+      <button
+        onClick={isFollowing ? handleUnfollow : handleFollow}
+        style={{
+          padding: '6px 16px',
+          border: '1px solid #1a1a1a',
+          backgroundColor: isFollowing ? '#fff' : '#1a1a1a',
+          color: isFollowing ? '#1a1a1a' : '#fff',
+          cursor: 'pointer',
+          fontFamily: serifFont,
+          fontSize: '16px',
+          borderRadius: 0,
+          marginBottom: '24px',
+        }}
+      >
+        {isFollowing ? 'Unfollow' : 'Follow'}
+      </button>
 
-      {/* Notes List */}
+      <div style={{ borderTop: '1px solid #ccc', marginBottom: '24px' }} />
+
+      {/* Notes */}
       {user.notes.length === 0 ? (
-        <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+        <p style={{ fontFamily: serifFont, color: '#666', textAlign: 'center', marginTop: '32px' }}>
           No public notes
-        </Typography>
+        </p>
       ) : (
         user.notes.map(note => (
-          <ProfileNote 
-            key={note.id} 
-            note={note} 
-            user={user}
-          />
+          <ProfileNote key={note.id} note={note} user={user} />
         ))
       )}
-    </Container>
+    </div>
   )
 }
 

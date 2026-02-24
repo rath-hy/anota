@@ -1,33 +1,33 @@
-// components/RedditStyleNote.jsx
+// components/StyledNote.jsx
 import { useState } from 'react'
-import { 
-  Card, 
-  CardContent, 
-  Avatar, 
-  Typography, 
-  Box, 
-  IconButton,
-  Collapse,
-  Link as MuiLink
-} from '@mui/material'
-import { Delete as DeleteIcon, ExpandMore, ExpandLess } from '@mui/icons-material'
+import { Collapse } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { useTheme } from '@mui/material/styles'
 import noteService from '../services/notes'
+import DeleteIcon from '@mui/icons-material/Delete'
+
+const serifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', Times, serif"
 
 const StyledNote = ({ note, onDelete }) => {
   const [expanded, setExpanded] = useState(true)
   const [showFullContent, setShowFullContent] = useState(false)
   const currentUser = useSelector(state => state.user)
-  
+  const theme = useTheme()
+
+  const linkColor = theme.palette.mode === 'dark' ? '#7eb3ff' : '#0000EE'
+  const mutedColor = theme.palette.text.secondary
+  const textColor = theme.palette.text.primary
+  const borderColor = theme.palette.divider
+
   const canDelete = currentUser && note.user.id === currentUser.id
   const isLongContent = note.content.length > 300
-  const displayContent = (isLongContent && !showFullContent) 
-    ? note.content.substring(0, 300) + '...' 
+  const displayContent = isLongContent && !showFullContent
+    ? note.content.substring(0, 300) + '...'
     : note.content
 
   const handleDelete = async () => {
-    if (window.confirm(`Delete this comment?`)) {
+    if (window.confirm('Delete this comment?')) {
       try {
         await noteService.deleteNote(note.id)
         onDelete && onDelete(note.id)
@@ -37,104 +37,143 @@ const StyledNote = ({ note, onDelete }) => {
     }
   }
 
-  // Generate color from username for avatar
   const stringToColor = (string) => {
     let hash = 0
     for (let i = 0; i < string.length; i++) {
       hash = string.charCodeAt(i) + ((hash << 5) - hash)
     }
-    const color = `hsl(${hash % 360}, 65%, 50%)`
-    return color
+    return `hsl(${hash % 360}, 65%, 50%)`
   }
 
   return (
-    <Card sx={{ mb: 1, boxShadow: 1 }}>
-      <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
-        {/* Header */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-          <IconButton 
-            size="small" 
-            onClick={() => setExpanded(!expanded)}
-            sx={{ mr: 1, p: 0.5 }}
-          >
-            {expanded ? <ExpandLess /> : <ExpandMore />}
-          </IconButton>
-          
-          <Avatar 
-            sx={{ 
-              width: 24, 
-              height: 24, 
-              bgcolor: stringToColor(note.user.username),
-              fontSize: '0.75rem',
-              mr: 1
-            }}
-          >
-            {note.user.username[0].toUpperCase()}
-          </Avatar>
-          
-          <Link 
-            to={`/users/${note.user.id}`} 
-            style={{ textDecoration: 'none', color: 'inherit' }}
-          >
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                fontWeight: 600,
-                '&:hover': { textDecoration: 'underline' }
-              }}
-            >
-              {note.user.username}
-            </Typography>
-          </Link>
-          
-          <Typography variant="caption" color="text.secondary" sx={{ mx: 1 }}>
-            •
-          </Typography>
-          
-          <Typography variant="caption" color="text.secondary">
-            {new Date(note.date).toLocaleDateString('en-US', { 
-              month: 'short', 
-              day: 'numeric',
-              year: 'numeric'
-            })}
-          </Typography>
-
-          {canDelete && onDelete && (
-            <IconButton 
-              size="small" 
-              onClick={handleDelete}
-              sx={{ ml: 'auto' }}
-              color="error"
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          )}
-        </Box>
-
-        {/* Content */}
-        <Collapse in={expanded}>
-          <Box sx={{ pl: 4 }}>
-            <Typography 
-              variant="body2" 
-              sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
-            >
-              {displayContent}
-            </Typography>
-            
-            {isLongContent && (
-              <MuiLink
-                component="button"
-                variant="caption"
-                onClick={() => setShowFullContent(!showFullContent)}
-                sx={{ mt: 0.5, cursor: 'pointer' }}
+    <div>
+      <div style={{ paddingTop: '16px', paddingBottom: expanded ? '16px' : '8px' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+          {/* Avatar / collapse toggle */}
+          <div style={{ width: '48px', flexShrink: 0 }}>
+            {expanded ? (
+              <button
+                onClick={() => setExpanded(false)}
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  border: `1px solid ${borderColor}`,
+                  borderRadius: '50%',
+                  padding: 0,
+                  cursor: 'pointer',
+                  background: stringToColor(note.user.username),
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  fontFamily: serifFont,
+                  fontSize: '18px',
+                }}
+                title="Collapse"
               >
-                {showFullContent ? 'Show less' : 'Read more'}
-              </MuiLink>
+                {note.user.username[0].toUpperCase()}
+              </button>
+            ) : (
+              <button
+                onClick={() => setExpanded(true)}
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  padding: '0',
+                  cursor: 'pointer',
+                  fontSize: '18px',
+                  color: mutedColor,
+                  lineHeight: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '48px',
+                  height: '20px',
+                  fontFamily: serifFont,
+                }}
+                title="Expand"
+              >
+                ⊕
+              </button>
             )}
-          </Box>
-        </Collapse>
-      </CardContent>
-    </Card>
+          </div>
+
+          {/* Content area */}
+          <div style={{ flex: 1 }}>
+            {/* Meta line */}
+            <div style={{
+              marginBottom: expanded ? '8px' : '0',
+              fontSize: '16px',
+              color: mutedColor,
+              fontFamily: serifFont,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              flexWrap: 'wrap',
+            }}>
+              <Link to={`/users/${note.user.id}`} style={{ color: textColor, textDecoration: 'none' }}>
+                <span>{note.user.name}</span>
+              </Link>
+              <span>·</span>
+              <span style={{ color: mutedColor }}>
+                {new Date(note.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </span>
+              {canDelete && onDelete && (
+                <button
+                  onClick={handleDelete}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    cursor: 'pointer',
+                    color: '#cc0000',
+                    padding: 0,
+                    marginLeft: 'auto',
+                    fontSize: '16px',
+                    fontFamily: serifFont,
+                  }}
+                >
+                  <DeleteIcon />
+                </button>
+              )}
+            </div>
+
+            {/* Note body */}
+            <Collapse in={expanded}>
+              <div style={{
+                lineHeight: '1.6',
+                color: textColor,
+                fontFamily: serifFont,
+                fontSize: '18px',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+              }}>
+                {displayContent}
+              </div>
+              {isLongContent && (
+                <button
+                  onClick={() => setShowFullContent(!showFullContent)}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    cursor: 'pointer',
+                    color: linkColor,
+                    padding: 0,
+                    marginTop: '4px',
+                    fontFamily: serifFont,
+                    fontSize: '14px',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  {showFullContent ? 'Show less' : 'Read more'}
+                </button>
+              )}
+            </Collapse>
+          </div>
+        </div>
+      </div>
+      <div style={{ borderTop: `1px solid ${borderColor}` }} />
+    </div>
   )
 }
 

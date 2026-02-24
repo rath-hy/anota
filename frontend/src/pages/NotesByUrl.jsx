@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react"
 import noteService from '../services/notes'
-import { useSearchParams } from "react-router-dom";
-import Note from "../components/Note";
-
+import { useSearchParams } from "react-router-dom"
 import StyledNote from '../components/StyledNote'
+import { Link } from "react-router-dom"
+import { Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
-import { Typography, Link, Card, CardContent, Box } from "@mui/material";
+const serifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', Times, serif"
 
 const NotesByUrlPage = () => {
   const [searchParams] = useSearchParams()
   const url = searchParams.get('url')
   const [notes, setNotes] = useState([])
+  const theme = useTheme()
+  const linkColor = theme.palette.mode === 'dark' ? '#7eb3ff' : '#0000EE'
 
   const fetchNotes = async () => {
     try {
@@ -22,41 +25,76 @@ const NotesByUrlPage = () => {
   }
 
   useEffect(() => {
-    if (url) {
-      fetchNotes()
-    }
+    if (url) fetchNotes()
   }, [url])
 
   return (
-    <div>
-      {/* <a href={url}><h3>{url}</h3></a> */}
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px' }}>
 
-      {/* <Typography variant="h3">{url}</Typography> */}
 
-      {/* {notes.map(note => 
-        <Note key={note.id} note={note} userId={note.user.id} showUrl={false} showGo={false}/>
-      )} */}
+      {/* Back link */}
+      <div style={{ marginBottom: '12px' }}>
+        <Link to="/" style={{ color: 'inherit', textDecoration: 'none', fontFamily: serifFont, fontSize: '16px' }}>
+          ← Home
+        </Link>
+      </div>
 
-      <Card>
-        <CardContent>
-          <Box sx={{display: 'flex', justifyContent: 'center'}}>
-            <Link href="#" underline="hover" variant="h5" sx={{ width: '400px', mx: 'auto'}}>
+      {/* URL header */}
+      <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '2px solid #1a1a1a' }}>
+        {/* <div style={{ fontSize: '14px', color: '#666', fontFamily: serifFont, marginBottom: '4px' }}>
+          URL:
+        </div> */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: linkColor, textDecoration: 'none' }}
+          >
+            <Typography variant="h2" sx={{ wordBreak: 'break-all' }}>
               {url}
-            </Link>
-          </Box>
-        </CardContent>
-      </Card>
+            </Typography>
+          </a>
 
-      {notes.map(note => 
-        <StyledNote 
-          key={note.id} 
-          note={note} 
-        />
-      )}
+          {/* <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'inherit', textDecoration: 'none', fontSize: '16px', lineHeight: 1, flexShrink: 0 }}
+            title="Visit URL"
+          >
+            ↗
+          </a> */}
 
+        </div>
+      </div>
+
+      {/* Notes header */}
+      <h2 style={{ fontFamily: serifFont, fontWeight: 400, marginBottom: '0', fontSize: '20px' }}>
+        Notes ({notes.length})
+      </h2>
+
+      {/* Notes list */}
+      <div>
+        {notes.length === 0 ? (
+          <div style={{
+            padding: '32px',
+            textAlign: 'center',
+            color: '#666',
+            border: '1px solid #ddd',
+            fontFamily: serifFont,
+            marginTop: '16px',
+          }}>
+            No notes yet for this URL.
+          </div>
+        ) : (
+          notes.map(note => (
+            <StyledNote key={note.id} note={note} />
+          ))
+        )}
+      </div>
     </div>
   )
-
 }
 
 export default NotesByUrlPage

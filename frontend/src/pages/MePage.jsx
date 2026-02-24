@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import axios from "axios"
-import { 
-  Container, 
-  Box, 
-  Avatar, 
-  Typography, 
-  ToggleButtonGroup, 
-  ToggleButton,
-  Divider 
-} from '@mui/material'
 import ProfileNote from "../components/ProfileNote"
-
 import config from '../config'
+import { useTheme } from '@mui/material/styles'
+
 const baseUrl = `${config.API_URL}/api/users`
+const serifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', Times, serif"
 
 const MePage = () => {
   const id = useParams().id
   const [user, setUser] = useState(null)
   const [filter, setFilter] = useState("all")
   const [notes, setNotes] = useState([])
+  const theme = useTheme()
+
+  const textColor = theme.palette.text.primary
+  const mutedColor = theme.palette.text.secondary
+  const borderColor = theme.palette.divider
+  const activeBg = textColor
+  const activeText = theme.palette.background.default
+  const inactiveBg = theme.palette.background.default
+  const inactiveText = textColor
 
   const onDelete = (noteId) => {
     setNotes(notes.filter(note => note.id !== noteId))
@@ -29,115 +31,100 @@ const MePage = () => {
     const fetchUser = async () => {
       try {
         const token = JSON.parse(localStorage.getItem('loggedNoteappUser'))?.token
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-
-        const response = await axios.get(`${baseUrl}/${id}`, config)
+        const cfg = { headers: { Authorization: `Bearer ${token}` } }
+        const response = await axios.get(`${baseUrl}/${id}`, cfg)
         setUser(response.data)
         setNotes(response.data?.notes || [])
       } catch (error) {
         console.error('Error fetching user:', error)
       }
     }
-
     fetchUser()
   }, [id])
 
-  const handleFilterChange = (event, newFilter) => {
-    if (newFilter !== null) {
-      setFilter(newFilter)
-    }
-  }
-
   const filteredNotes = notes.filter((note) => {
     switch (filter) {
-      case "private":
-        return note.private
-      case "public":
-        return !note.private
-      case "all":
-      default:
-        return true
+      case "private": return note.private
+      case "public": return !note.private
+      default: return true
     }
   })
 
   if (!user) {
     return (
-      <Container maxWidth="md" sx={{ mt: 3 }}>
-        <Typography>Loading...</Typography>
-      </Container>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px', fontFamily: serifFont, color: textColor }}>
+        Loading...
+      </div>
     )
   }
 
   return (
-    <Container maxWidth="md" sx={{ mt: 3 }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px' }}>
       {/* Profile Header */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-        <Avatar 
-          src={user.photoURL}
-          sx={{ width: 80, height: 80 }}
-        >
-          {user.username[0].toUpperCase()}
-        </Avatar>
-        <Box>
-          <Typography variant="h5" fontWeight={600}>
-            {user.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            u/{user.username}
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-            <Typography variant="body2">
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+        <div style={{
+          width: '80px', height: '80px',
+          borderRadius: '50%',
+          backgroundColor: '#ccc',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: serifFont, fontSize: '32px', color: '#fff',
+          overflow: 'hidden', flexShrink: 0,
+        }}>
+          {user.photoURL
+            ? <img src={user.photoURL} alt={user.username} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            : user.username[0].toUpperCase()
+          }
+        </div>
+        <div>
+          <div style={{ fontFamily: serifFont, fontSize: '24px', fontWeight: 400, color: textColor }}>{user.name}</div>
+          <div style={{ fontFamily: serifFont, fontSize: '18px', color: mutedColor }}>u/{user.username}</div>
+          <div style={{ display: 'flex', gap: '16px', marginTop: '8px' }}>
+            <span style={{ fontFamily: serifFont, fontSize: '22px', color: textColor }}>
               <strong>{user.notes.length}</strong> notes
-            </Typography>
-            <Typography variant="body2">
-              <strong>{user.notes.reduce((prev, curr) => prev + curr.likes, 0)}</strong> likes
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
+            </span>
+          </div>
+        </div>
+      </div>
 
-      <Divider sx={{ mb: 3 }} />
+      <div style={{ borderTop: `1px solid ${borderColor}`, marginBottom: '24px' }} />
 
-      {/* Filter Buttons */}
-      <Box sx={{ mb: 2 }}>
-        <ToggleButtonGroup
-          value={filter}
-          exclusive
-          onChange={handleFilterChange}
-          size="small"
-        >
-          <ToggleButton value="all">
-            All ({notes.length})
-          </ToggleButton>
-          <ToggleButton value="public">
-            Public ({notes.filter(n => !n.private).length})
-          </ToggleButton>
-          <ToggleButton value="private">
-            Private ({notes.filter(n => n.private).length})
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
+      {/* Filter buttons */}
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        {['all', 'public', 'private'].map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            style={{
+              padding: '4px 12px',
+              border: `1px solid ${borderColor}`,
+              backgroundColor: filter === f ? activeBg : inactiveBg,
+              color: filter === f ? activeText : inactiveText,
+              cursor: 'pointer',
+              fontFamily: serifFont,
+              fontSize: '16px',
+              borderRadius: 0,
+            }}
+          >
+            {f.charAt(0).toUpperCase() + f.slice(1)} ({
+              f === 'all' ? notes.length :
+              f === 'public' ? notes.filter(n => !n.private).length :
+              notes.filter(n => n.private).length
+            })
+          </button>
+        ))}
+      </div>
 
-      {/* Notes List */}
+      {/* Notes */}
       {filteredNotes.length === 0 ? (
-        <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+        <p style={{ fontFamily: serifFont, color: mutedColor, textAlign: 'center', marginTop: '32px' }}>
           No notes to display
-        </Typography>
+        </p>
       ) : (
         filteredNotes.map((note) => (
-          <ProfileNote
-            key={note.id}
-            note={note}
-            user={user}
-            onDelete={onDelete}
-          />
+          <ProfileNote key={note.id} note={note} user={user} onDelete={onDelete} />
         ))
       )}
-    </Container>
+    </div>
   )
 }
 

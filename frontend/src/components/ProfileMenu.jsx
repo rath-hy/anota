@@ -9,7 +9,6 @@ import {
   Divider,
   Typography,
   Box,
-  Button
 } from '@mui/material'
 import { 
   Person as PersonIcon, 
@@ -63,21 +62,24 @@ const ProfileMenu = () => {
   // If not logged in, show login button
   if (!currentUser) {
     return (
-      <Button
-        variant="contained"
+      <button
         onClick={handleLogin}
-        sx={{
-          backgroundColor: themeMode === 'light' ? 'black' : 'white',
-          color: themeMode === 'light' ? 'white' : 'black',
-          '&:hover': {
-            backgroundColor: themeMode === 'light' ? '#333' : '#e0e0e0',
-          },
-          textTransform: 'none',
-          fontWeight: 500
+        style={{
+          width: '80px',
+          color: themeMode === 'light' ? '#ffffff' : '#1a1a1a',
+          backgroundColor: themeMode === 'light' ? '#1a1a1a' : '#e0e0e0',
+          border: '1px solid currentColor',
+          padding: '4px 12px',
+          cursor: 'pointer',
+          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          fontSize: '18px',
+          borderRadius: 0,
+          height: '36px',
+          boxSizing: 'border-box',
         }}
       >
-        Log In
-      </Button>
+        Log in
+      </button>
     )
   }
 
