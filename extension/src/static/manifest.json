@@ -13,7 +13,7 @@
     "default_title": "anota",
     "default_icon": "anota.png"
   },
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["activeTab"],
   "host_permissions": ["http://localhost:3001/*"],
   "options_page": "options.html",
   "background": {
