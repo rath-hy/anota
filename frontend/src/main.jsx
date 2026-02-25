@@ -9,6 +9,8 @@ import userReducer from './reducers/userReducer.jsx'
 import { createStore, combineReducers } from 'redux'
 
 import store from './store/index.js'
+import '@fontsource/libre-caslon-text/400.css'
+import '@fontsource/libre-caslon-text/700.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

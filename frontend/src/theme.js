@@ -1,21 +1,26 @@
 // src/theme.js
-import { createTheme } from '@mui/material/styles'
+import { createTheme } from "@mui/material/styles";
 
-const serifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', Times, serif"
+const serifFont = "'EB Garamond', Georgia, 'Times New Roman', Times, serif";
 
 const baseTheme = {
   typography: {
     fontFamily: serifFont,
-    h1: { fontSize: '24px', fontWeight: 500, lineHeight: 1.4 },
-    h2: { fontSize: '20px', fontWeight: 500, lineHeight: 1.4 },
-    h3: { fontSize: '18px', fontWeight: 500, lineHeight: 1.4 },
-    h4: { fontSize: '16px', fontWeight: 500, lineHeight: 1.4 },
-    h5: { fontSize: '16px', fontWeight: 500, lineHeight: 1.4 },
-    h6: { fontSize: '16px', fontWeight: 500, lineHeight: 1.4 },
-    body1: { fontFamily: serifFont, fontSize: '16px', fontWeight: 500, lineHeight: 1.6 },
-    body2: { fontFamily: serifFont, fontSize: '15px', lineHeight: 1.6 },
+    h1: { fontSize: "24px", fontWeight: 500, lineHeight: 1.4 },
+    h2: { fontSize: "20px", fontWeight: 500, lineHeight: 1.4 },
+    h3: { fontSize: "18px", fontWeight: 500, lineHeight: 1.4 },
+    h4: { fontSize: "16px", fontWeight: 500, lineHeight: 1.4 },
+    h5: { fontSize: "16px", fontWeight: 500, lineHeight: 1.4 },
+    h6: { fontSize: "16px", fontWeight: 500, lineHeight: 1.4 },
+    body1: {
+      fontFamily: serifFont,
+      fontSize: "16px",
+      fontWeight: 500,
+      lineHeight: 1.6,
+    },
+    body2: { fontFamily: serifFont, fontSize: "15px", lineHeight: 1.6 },
     caption: { fontFamily: serifFont },
-    button: { fontFamily: serifFont, textTransform: 'none', fontWeight: 400 },
+    button: { fontFamily: serifFont, textTransform: "none", fontWeight: 400 },
   },
   shape: {
     borderRadius: 0,
@@ -24,8 +29,8 @@ const baseTheme = {
     MuiCard: {
       styleOverrides: {
         root: {
-          boxShadow: 'none',
-          border: '1px solid #cccccc',
+          boxShadow: "none",
+          border: "1px solid #cccccc",
           borderRadius: 0,
         },
       },
@@ -35,19 +40,19 @@ const baseTheme = {
         root: {
           borderRadius: 0,
           fontFamily: serifFont,
-          textTransform: 'none',
+          textTransform: "none",
           fontWeight: 400,
-          boxShadow: 'none',
-          '&:hover': { boxShadow: 'none' },
+          boxShadow: "none",
+          "&:hover": { boxShadow: "none" },
         },
         containedPrimary: {
-          backgroundColor: '#1a1a1a',
-          color: '#ffffff',
-          '&:hover': { backgroundColor: '#333' },
+          backgroundColor: "#1a1a1a",
+          color: "#ffffff",
+          "&:hover": { backgroundColor: "#333" },
         },
         outlinedPrimary: {
-          border: '1px solid #1a1a1a',
-          color: '#1a1a1a',
+          border: "1px solid #1a1a1a",
+          color: "#1a1a1a",
         },
       },
     },
@@ -69,14 +74,14 @@ const baseTheme = {
     MuiTextField: {
       styleOverrides: {
         root: {
-          '& .MuiInputBase-root': {
+          "& .MuiInputBase-root": {
             fontFamily: serifFont,
             borderRadius: 0,
           },
-          '& .MuiInputLabel-root': {
+          "& .MuiInputLabel-root": {
             fontFamily: serifFont,
           },
-          '& .MuiOutlinedInput-root': {
+          "& .MuiOutlinedInput-root": {
             borderRadius: 0,
           },
         },
@@ -93,7 +98,7 @@ const baseTheme = {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          boxShadow: 'none',
+          boxShadow: "none",
         },
       },
     },
@@ -101,8 +106,8 @@ const baseTheme = {
       styleOverrides: {
         paper: {
           borderRadius: 0,
-          border: '1px solid #cccccc',
-          boxShadow: 'none',
+          border: "1px solid #cccccc",
+          boxShadow: "none",
         },
       },
     },
@@ -117,7 +122,7 @@ const baseTheme = {
       styleOverrides: {
         root: {
           fontFamily: serifFont,
-          textTransform: 'none',
+          textTransform: "none",
           fontWeight: 400,
         },
       },
@@ -126,7 +131,7 @@ const baseTheme = {
       styleOverrides: {
         root: {
           fontFamily: serifFont,
-          textTransform: 'none',
+          textTransform: "none",
           borderRadius: 0,
         },
       },
@@ -156,54 +161,54 @@ const baseTheme = {
   MuiLink: {
     styleOverrides: {
       root: {
-        textDecoration: 'none',
+        textDecoration: "none",
       },
     },
   },
-}
+};
 
 export const lightTheme = createTheme({
   ...baseTheme,
   palette: {
-    mode: 'light',
+    mode: "light",
     background: {
-      default: '#FAFAF8',
-      paper: '#ffffff',
+      default: "#FAFAF8",
+      paper: "#ffffff",
     },
     primary: {
-      main: '#1a1a1a',
-      contrastText: '#ffffff',
+      main: "#1a1a1a",
+      contrastText: "#ffffff",
     },
     secondary: {
-      main: '#666666',
+      main: "#666666",
     },
     text: {
-      primary: '#1a1a1a',
-      secondary: '#666666',
+      primary: "#1a1a1a",
+      secondary: "#666666",
     },
-    divider: '#cccccc',
+    divider: "#cccccc",
   },
-})
+});
 
 export const darkTheme = createTheme({
   ...baseTheme,
   palette: {
-    mode: 'dark',
+    mode: "dark",
     background: {
-      default: '#141414',
-      paper: '#1e1e1e',
+      default: "#141414",
+      paper: "#1e1e1e",
     },
     primary: {
-      main: '#e0e0e0',
-      contrastText: '#1a1a1a',
+      main: "#e0e0e0",
+      contrastText: "#1a1a1a",
     },
     secondary: {
-      main: '#999999',
+      main: "#999999",
     },
     text: {
-      primary: '#e0e0e0',
-      secondary: '#999999',
+      primary: "#e0e0e0",
+      secondary: "#999999",
     },
-    divider: '#333333',
+    divider: "#333333",
   },
-})
+});

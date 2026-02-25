@@ -1,63 +1,63 @@
-import { useState } from 'react'
-import { 
-  IconButton, 
-  Avatar, 
-  Menu, 
-  MenuItem, 
-  ListItemIcon, 
+import { useState } from "react";
+import {
+  IconButton,
+  Avatar,
+  Menu,
+  MenuItem,
+  ListItemIcon,
   ListItemText,
   Divider,
   Typography,
   Box,
-} from '@mui/material'
-import { 
-  Person as PersonIcon, 
-  DarkMode as DarkModeIcon, 
+} from "@mui/material";
+import {
+  Person as PersonIcon,
+  DarkMode as DarkModeIcon,
   LightMode as LightModeIcon,
-  Logout as LogoutIcon
-} from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { resetUserAction } from '../reducers/userReducer'
-import { toggleTheme } from '../reducers/themeReducer'
+  Logout as LogoutIcon,
+} from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { resetUserAction } from "../reducers/userReducer";
+import { toggleTheme } from "../reducers/themeReducer";
 
 const ProfileMenu = () => {
-  const [anchorEl, setAnchorEl] = useState(null)
-  const currentUser = useSelector(state => state.user)
-  const themeMode = useSelector(state => state.theme)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  
-  const open = Boolean(anchorEl)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const currentUser = useSelector((state) => state.user);
+  const themeMode = useSelector((state) => state.theme);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   const handleViewProfile = () => {
-    navigate(`/users/${currentUser.id}`)
-    handleClose()
-  }
+    navigate(`/users/${currentUser.id}`);
+    handleClose();
+  };
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedNoteappUser')
-    dispatch(resetUserAction())
-    navigate('/')
-    handleClose()
-  }
+    window.localStorage.removeItem("loggedNoteappUser");
+    dispatch(resetUserAction());
+    navigate("/");
+    handleClose();
+  };
 
   const handleLogin = () => {
-    navigate('/account')
-  }
+    navigate("/account");
+  };
 
   const handleToggleTheme = () => {
-    dispatch(toggleTheme())
-    handleClose()
-  }
+    dispatch(toggleTheme());
+    handleClose();
+  };
 
   // If not logged in, show login button
   if (!currentUser) {
@@ -65,37 +65,34 @@ const ProfileMenu = () => {
       <button
         onClick={handleLogin}
         style={{
-          width: '80px',
-          color: themeMode === 'light' ? '#ffffff' : '#1a1a1a',
-          backgroundColor: themeMode === 'light' ? '#1a1a1a' : '#e0e0e0',
-          border: '1px solid currentColor',
-          padding: '4px 12px',
-          cursor: 'pointer',
-          fontFamily: "'Cormorant Garamond', Georgia, serif",
-          fontSize: '18px',
+          width: "80px",
+          color: themeMode === "light" ? "#ffffff" : "#1a1a1a",
+          backgroundColor: themeMode === "light" ? "#1a1a1a" : "#e0e0e0",
+          border: "1px solid currentColor",
+          padding: "4px 12px",
+          cursor: "pointer",
+          fontFamily: "'EB Garamond', Georgia, serif",
+          fontSize: "18px",
           borderRadius: 0,
-          height: '36px',
-          boxSizing: 'border-box',
+          height: "36px",
+          boxSizing: "border-box",
         }}
       >
         Log in
       </button>
-    )
+    );
   }
 
   // If logged in, show avatar with menu
   return (
     <>
-      <IconButton 
-        onClick={handleClick}
-        sx={{ p: 0 }}
-      >
-        <Avatar 
+      <IconButton onClick={handleClick} sx={{ p: 0 }}>
+        <Avatar
           src={currentUser?.photoURL}
           alt={currentUser?.username}
           sx={{ width: 32, height: 32 }}
         >
-          {currentUser?.username?.[0]?.toUpperCase() || '?'}
+          {currentUser?.username?.[0]?.toUpperCase() || "?"}
         </Avatar>
       </IconButton>
 
@@ -104,24 +101,21 @@ const ProfileMenu = () => {
         open={open}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: "bottom",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         PaperProps={{
-          sx: { width: 250, mt: 1 }
+          sx: { width: 250, mt: 1 },
         }}
       >
         {/* User info header */}
         <Box sx={{ px: 2, py: 1.5 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Avatar 
-              src={currentUser.photoURL}
-              sx={{ width: 40, height: 40 }}
-            >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar src={currentUser.photoURL} sx={{ width: 40, height: 40 }}>
               {currentUser.username[0].toUpperCase()}
             </Avatar>
             <Box>
@@ -134,7 +128,7 @@ const ProfileMenu = () => {
             </Box>
           </Box>
         </Box>
-        
+
         <Divider />
 
         <MenuItem onClick={handleViewProfile}>
@@ -146,10 +140,14 @@ const ProfileMenu = () => {
 
         <MenuItem onClick={handleToggleTheme}>
           <ListItemIcon>
-            {themeMode === 'light' ? <DarkModeIcon fontSize='small' /> : <LightModeIcon fontSize='small'/>}
+            {themeMode === "light" ? (
+              <DarkModeIcon fontSize="small" />
+            ) : (
+              <LightModeIcon fontSize="small" />
+            )}
           </ListItemIcon>
           <ListItemText>
-            {themeMode === 'light' ? 'Dark Mode' : 'Light Mode'}
+            {themeMode === "light" ? "Dark Mode" : "Light Mode"}
           </ListItemText>
         </MenuItem>
 
@@ -163,7 +161,7 @@ const ProfileMenu = () => {
         </MenuItem>
       </Menu>
     </>
-  )
-}
+  );
+};
 
-export default ProfileMenu
+export default ProfileMenu;
