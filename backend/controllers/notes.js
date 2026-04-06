@@ -19,6 +19,7 @@ router.get('/', async (req, res) => {
 
   if (req.query.publicOnly === 'true') {
     where.private = false
+    where.teamId = null  // team notes are not shown in the public feed
   }
 
   const notes = await Note.findAll({
@@ -34,7 +35,14 @@ router.post('/', tokenExtractor, async (req, res) => {
   console.log(req.body)
   try {
     const user = await User.findByPk(req.decodedToken.id)
-    const note = await Note.create({...req.body, url: normalizeUrl(req.body.url), userId: user.id, date: new Date()})
+    const noteData = {
+      ...req.body,
+      url: normalizeUrl(req.body.url),
+      userId: user.id,
+      date: new Date(),
+      teamId: req.body.teamId || null
+    }
+    const note = await Note.create(noteData)
     return res.json(note)
   } catch(error) {
     return res.status(400).json({ error })

@@ -10,9 +10,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 
-// Only connect to emulator in development
-if (import.meta.env.DEV) {
-  connectAuthEmulator(auth, 'http://127.0.0.1:9099')
-}
+// // Only connect to emulator in development
+// if (import.meta.env.DEV) {
+//   connectAuthEmulator(auth, 'http://127.0.0.1:9099')
+// }
 
 export { auth }

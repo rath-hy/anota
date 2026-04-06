@@ -26,6 +26,14 @@ Note.init({
   likes: {
     type: DataTypes.INTEGER,
     defaultValue: 0
+  },
+  teamId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'teams',
+      key: 'id'
+    }
   }
 }, {
     sequelize,

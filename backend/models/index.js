@@ -1,27 +1,53 @@
 const Note = require('./note')
 const User = require('./user')
 const Following = require('./following')
+const Team = require('./team')
+const TeamMember = require('./teamMember')
 
 User.hasMany(Note)
 Note.belongsTo(User)
 
-// Define the self-referential many-to-many relationship
+// Self-referential follow relationship
 User.belongsToMany(User, {
   through: Following,
-  as: 'Following',           // User.getFollowing() - users I follow
-  foreignKey: 'userId',       // My ID
-  otherKey: 'followedUserId'  // Their ID
+  as: 'Following',
+  foreignKey: 'userId',
+  otherKey: 'followedUserId'
 })
 
 User.belongsToMany(User, {
   through: Following,
-  as: 'Followers',            // User.getFollowers() - users who follow me
-  foreignKey: 'followedUserId', // My ID (I'm being followed)
-  otherKey: 'userId'            // Their ID (they follow me)
+  as: 'Followers',
+  foreignKey: 'followedUserId',
+  otherKey: 'userId'
 })
+
+// Team relationships
+Team.belongsTo(User, { as: 'creator', foreignKey: 'creatorId' })
+User.hasMany(Team, { as: 'createdTeams', foreignKey: 'creatorId' })
+
+Team.belongsToMany(User, {
+  through: TeamMember,
+  as: 'members',
+  foreignKey: 'teamId',
+  otherKey: 'userId'
+})
+
+User.belongsToMany(Team, {
+  through: TeamMember,
+  as: 'teams',
+  foreignKey: 'userId',
+  otherKey: 'teamId'
+})
+
+// Notes can optionally belong to a team
+Note.belongsTo(Team, { foreignKey: 'teamId', as: 'team' })
+Team.hasMany(Note, { foreignKey: 'teamId', as: 'notes' })
 
 module.exports = {
-  Note, 
+  Note,
   User,
-  Following  // Add this so you can import it elsewhere if needed
+  Following,
+  Team,
+  TeamMember
 }

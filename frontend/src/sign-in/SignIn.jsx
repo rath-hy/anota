@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from 'firebase/auth'
 import { auth } from '../firebase'
 import { setUserAction } from '../reducers/userReducer'
 import noteService from '../services/notes'
@@ -83,14 +83,46 @@ export default function SignIn(props) {
   //   setOpen(false)
   // }
 
+  // Handle redirect result on page load
+  React.useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth)
+        if (!result) return
+
+        const idToken = await result.user.getIdToken()
+        const response = await axios.post(`${config.API_URL}/api/login/google`, { idToken })
+
+        const user = response.data
+        window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
+        dispatch(setUserAction(user))
+        noteService.setToken(user.token)
+        navigate('/')
+      } catch (error) {
+        console.error('Redirect login failed:', error)
+      }
+    }
+    handleRedirectResult()
+  }, [])
+
   const handleGoogleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider()
+
+      provider.setCustomParameters({
+        prompt: "select_account"
+      })
+
+      // ALWAYS use popup for now
       const result = await signInWithPopup(auth, provider)
 
+      console.log('Firebase user:', result.user)
+
       const idToken = await result.user.getIdToken()
+      console.log('ID token:', idToken)
+
       const response = await axios.post(`${config.API_URL}/api/login/google`, { idToken })
-      
+
       const user = response.data
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
       dispatch(setUserAction(user))
@@ -101,6 +133,25 @@ export default function SignIn(props) {
       console.error('Google login failed:', error)
     }
   }
+
+  // const handleGoogleLogin = async () => {
+  //   try {
+  //     const provider = new GoogleAuthProvider()
+  //     const result = await signInWithPopup(auth, provider)
+
+  //     const idToken = await result.user.getIdToken()
+  //     const response = await axios.post(`${config.API_URL}/api/login/google`, { idToken })
+      
+  //     const user = response.data
+  //     window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
+  //     dispatch(setUserAction(user))
+  //     noteService.setToken(user.token)
+
+  //     navigate('/')
+  //   } catch (error) {
+  //     console.error('Google login failed:', error)
+  //   }
+  // }
 
   // Username/password login handler - not needed for Google-only
   // const handleSubmit = async (event) => {
