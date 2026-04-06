@@ -44,7 +44,7 @@ app.use('/api/teams', teamsRouter)
 const start = async () => {
   await connectToDatabase()
 
-  await sequelize.sync({ alter: true })
+  await sequelize.sync({ alter: { drop: false } })
 
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
