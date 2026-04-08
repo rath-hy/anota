@@ -13,8 +13,14 @@
     "default_title": "anota",
     "default_icon": "anota.png"
   },
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage", "tabs"],
   "host_permissions": ["http://localhost:3001/*"],
+  "externally_connectable": {
+    "matches": [
+      "https://anota.puthyrathy.com/*",
+      "https://anota-ashy.vercel.app/*"
+    ]
+  },
   "options_page": "options.html",
   "background": {
     "service_worker": "background.js"

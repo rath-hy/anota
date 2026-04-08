@@ -1,18 +1,23 @@
-// This runs on facebook.com
-console.log("Anota extension loaded on:", window.location.href);
+// Trigger badge update for this page
+chrome.runtime.sendMessage({
+  action: 'updateBadge',
+  url: window.location.href,
+})
 
-// Request notes for this page
-chrome.runtime.sendMessage(
-  {
-    action: "fetchNotes",
-    pageUrl: window.location.href
-  },
-  (response) => {
-    if (response.success) {
-      console.log("Got notes:", response.notes);
-      // Do something with the notes - display them on the page!
-    } else {
-      console.error("Failed to fetch notes:", response.error);
-    }
-  }
-);
+// Relay auth token from Anota website to extension background
+const TRUSTED_ORIGINS = [
+  'https://anota.puthyrathy.com',
+  'https://anota-ashy.vercel.app',
+]
+
+window.addEventListener('message', event => {
+  if (!TRUSTED_ORIGINS.includes(event.origin)) return
+  if (!event.data || event.data.type !== 'ANOTA_AUTH') return
+  if (!event.data.token || !event.data.user) return
+
+  chrome.runtime.sendMessage({
+    action: 'relayAuth',
+    token: event.data.token,
+    user: event.data.user,
+  })
+})

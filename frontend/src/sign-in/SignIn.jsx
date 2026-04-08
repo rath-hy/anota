@@ -63,6 +63,16 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }))
 
+// Send auth token to the Anota browser extension (if installed)
+function notifyExtension(user) {
+  try {
+    window.postMessage(
+      { type: 'ANOTA_AUTH', token: user.token, user: { id: user.id, username: user.username, name: user.name } },
+      window.location.origin
+    )
+  } catch (_) {}
+}
+
 export default function SignIn(props) {
   // Username/password login state - not needed for Google-only
   // const [emailError, setEmailError] = React.useState(false)
@@ -97,6 +107,7 @@ export default function SignIn(props) {
         window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
         dispatch(setUserAction(user))
         noteService.setToken(user.token)
+        notifyExtension(user)
         navigate('/')
       } catch (error) {
         console.error('Redirect login failed:', error)
@@ -127,6 +138,7 @@ export default function SignIn(props) {
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
       dispatch(setUserAction(user))
       noteService.setToken(user.token)
+      notifyExtension(user)
 
       navigate('/')
     } catch (error) {
