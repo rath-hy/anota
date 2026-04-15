@@ -12,6 +12,7 @@ import NewNotePage from "./pages/NewNotePage";
 import CreateTeamPage from "./pages/CreateTeamPage";
 import JoinTeamPage from "./pages/JoinTeamPage";
 import ManageTeamPage from "./pages/ManageTeamPage";
+import EditNotePage from "./pages/EditNotePage";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserAction } from "./reducers/userReducer";
 import noteService from "./services/notes";
@@ -187,6 +188,7 @@ const App = () => {
             <Route path="/create-team" element={<CreateTeamPage />} />
             <Route path="/join-team" element={<JoinTeamPage />} />
             <Route path="/teams/:id/manage" element={<ManageTeamPage />} />
+            <Route path="/notes/:id/edit" element={<EditNotePage />} />
           </Routes>
         </Box>
       </Router>

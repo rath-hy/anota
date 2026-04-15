@@ -19,22 +19,13 @@ const GoogleLoginButton = () => {
     try {
       const provider = new GoogleAuthProvider()
       const result = await signInWithPopup(auth, provider)
-      console.log('logged in user', result.user)
-
       const idToken = await result.user.getIdToken()
-      console.log('logged in user id', idToken)
 
       const GOOGLE_LOGIN_URL = `${config.API_URL}/api/login/google`
 
-      const response = await axios.post(GOOGLE_LOGIN_URL, {
-        idToken
-      })
+      const response = await axios.post(GOOGLE_LOGIN_URL, { idToken })
 
       const user = response.data
-
-      
-      console.log('user info stored locally', user)
-      
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
       dispatch(setUserAction({id: user.id, name: user.name, username: user.username}))
 

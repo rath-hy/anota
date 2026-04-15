@@ -29,9 +29,15 @@ const create = async newObject => {
   return response.data
 }
 
-const update = (id, newObject) => {
-  const request = axios.put(`${ baseUrl }/${id}`, newObject)
-  return request.then(response => response.data)
+const getById = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`)
+  return response.data
+}
+
+const update = async (id, newObject) => {
+  const config = { headers: { Authorization: store.getState().token } }
+  const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
+  return response.data
 }
 
 const getPublicByUrl = (url) => {
@@ -59,4 +65,4 @@ const searchUrls = async key => {
   return response.data
 }
 
-export default { getAll, getAllPublic, getPublicByUrl, create, update, setToken, deleteNote, getUniqueUrls, searchUrls }
+export default { getAll, getAllPublic, getPublicByUrl, getById, create, update, setToken, deleteNote, getUniqueUrls, searchUrls }

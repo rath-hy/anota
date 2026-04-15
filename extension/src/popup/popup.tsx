@@ -242,7 +242,7 @@ const App: React.FC = () => {
       {/* Header */}
       <div className="popup-header">
         <div className="popup-logo">
-          <img src="anota.png" alt="" />
+          {/* <img src="anota.png" alt="" /> */}
           <span className="popup-logo-text">Anota</span>
         </div>
         {auth ? (

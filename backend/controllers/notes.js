@@ -27,12 +27,10 @@ router.get('/', async (req, res) => {
     // attributes: { exclude: ['userId'] },
     include: includeOptions
   })
-  console.log(JSON.stringify(notes, null, 2))
   res.json(notes)
 })
 
 router.post('/', tokenExtractor, async (req, res) => {
-  console.log(req.body)
   try {
     const user = await User.findByPk(req.decodedToken.id)
     const noteData = {

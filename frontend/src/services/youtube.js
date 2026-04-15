@@ -21,12 +21,7 @@ const extractVideoId = (url) => {
 const getVideoInfo = async (url) => {
   const videoId = extractVideoId(url)
 
-  if (!videoId) {
-    console.log('Invalid YouTube URL')
-    return null
-  }
-
-  console.log('video id', videoId)
+  if (!videoId) return null
 
   try {
     const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${VITE_YOUTUBE_API_KEY}

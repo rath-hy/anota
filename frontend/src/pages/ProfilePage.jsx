@@ -12,12 +12,7 @@ const ProfilePage = () => {
     return <div>Loading...</div>
   }
 
-  console.log('logged in user', loggedInUser)
   const isOwnProfile = id == loggedInUser.id
-  
-  console.log('is own profile?', isOwnProfile)
-  console.log('id', id)
-  console.log('logged in user id', id)
 
   return isOwnProfile ? <MePage/> : <TheirPage/>
 }

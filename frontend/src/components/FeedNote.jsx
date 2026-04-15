@@ -6,6 +6,7 @@ import noteService from "../services/notes";
 import youtubeService from "../services/youtube";
 import { useTheme } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const serifFont = "'EB Garamond', Georgia, 'Times New Roman', Times, serif";
@@ -166,12 +167,31 @@ const FeedNote = ({ note, onDelete }) => {
                 href={note.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Visit URL"
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "22px",
+                  height: "22px",
+                  border: `1px solid ${borderColor}`,
                   color: linkColor,
                   textDecoration: "none",
+                  fontSize: "13px",
                   lineHeight: 1,
+                  flexShrink: 0,
+                  transition: "background 0.15s, color 0.15s, border-color 0.15s",
                 }}
-                title="Visit URL"
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = theme.palette.text.primary
+                  e.currentTarget.style.color = theme.palette.background.paper
+                  e.currentTarget.style.borderColor = theme.palette.text.primary
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = "transparent"
+                  e.currentTarget.style.color = linkColor
+                  e.currentTarget.style.borderColor = borderColor
+                }}
               >
                 ↗
               </a>
@@ -181,21 +201,38 @@ const FeedNote = ({ note, onDelete }) => {
                 </span>
               )}
               {canDelete && onDelete && (
-                <button
-                  onClick={handleDelete}
-                  style={{
-                    border: "none",
-                    background: "none",
-                    cursor: "pointer",
-                    color: "#cc0000",
-                    padding: 0,
-                    marginLeft: "auto",
-                    fontSize: "16px",
-                    fontFamily: serifFont,
-                  }}
-                >
-                  <DeleteIcon />
-                </button>
+                <div style={{ display: "flex", gap: "4px", marginLeft: "auto" }}>
+                  <button
+                    onClick={() => navigate(`/notes/${note.id}/edit`)}
+                    style={{
+                      border: "none",
+                      background: "none",
+                      cursor: "pointer",
+                      color: mutedColor,
+                      padding: 0,
+                      fontSize: "16px",
+                      fontFamily: serifFont,
+                    }}
+                    title="Edit note"
+                  >
+                    <EditIcon fontSize="small" />
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    style={{
+                      border: "none",
+                      background: "none",
+                      cursor: "pointer",
+                      color: "#cc0000",
+                      padding: 0,
+                      fontSize: "16px",
+                      fontFamily: serifFont,
+                    }}
+                    title="Delete note"
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </button>
+                </div>
               )}
             </div>
 

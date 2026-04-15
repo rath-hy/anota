@@ -39,13 +39,9 @@ router.post('/', async (request, response) => {
 })
 
 router.post('/google', async (request, response) => {
-  console.log('GOOGLE ROUTE HIT!')
-
   try {
     const { idToken } = request.body
-    console.log('id token', idToken)
     const decodedToken = await admin.auth().verifyIdToken(idToken)
-    console.log('decoded token', decodedToken)
     const { email, name, uid, picture } = decodedToken
 
     let user = await User.findOne({ where: { email }})

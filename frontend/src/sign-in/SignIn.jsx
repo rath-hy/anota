@@ -127,10 +127,7 @@ export default function SignIn(props) {
       // ALWAYS use popup for now
       const result = await signInWithPopup(auth, provider)
 
-      console.log('Firebase user:', result.user)
-
       const idToken = await result.user.getIdToken()
-      console.log('ID token:', idToken)
 
       const response = await axios.post(`${config.API_URL}/api/login/google`, { idToken })
 

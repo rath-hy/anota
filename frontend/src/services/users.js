@@ -18,8 +18,6 @@ const unfollow = async (userIdToUnfollow) => {
     headers: { Authorization: store.getState().token }
   }
 
-  console.log('config', config)
-
   const response = await axios.delete(`${baseUrl}/unfollow/${userIdToUnfollow}`, config)
   return response.data
 }

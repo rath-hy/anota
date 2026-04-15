@@ -24,7 +24,7 @@ const App: React.FC = () => {
   return (
     <div>
       <div className="options-header">
-        <img src="anota.png" alt="Anota" className="options-logo-img" />
+        {/* <img src="anota.png" alt="Anota" className="options-logo-img" />  */}
         <span className="options-logo-text">Anota</span>
       </div>
 
