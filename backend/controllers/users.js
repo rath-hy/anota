@@ -80,7 +80,8 @@ router.get('/:id', async (req, res) => {
   }
 
   const user = await User.findByPk(req.params.id, {
-    include: includeOptions
+    include: includeOptions,
+    order: [[Note, 'date', 'DESC']]
   })
 
   if (user) {

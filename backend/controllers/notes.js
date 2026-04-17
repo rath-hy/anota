@@ -25,7 +25,8 @@ router.get('/', async (req, res) => {
   const notes = await Note.findAll({
     where,
     // attributes: { exclude: ['userId'] },
-    include: includeOptions
+    include: includeOptions,
+    order: [['date', 'DESC']]
   })
   res.json(notes)
 })
