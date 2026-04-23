@@ -30,6 +30,8 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [composeOpen, setComposeOpen] = useState(false)
   const [composeText, setComposeText] = useState('')
+  const [composeVisibility, setComposeVisibility] = useState<'public' | 'private' | 'team'>('public')
+  const [composeTeamId, setComposeTeamId] = useState<number | null>(null)
   const [posting, setPosting] = useState(false)
 
   // ── Init ──
@@ -116,6 +118,7 @@ const App: React.FC = () => {
           setSelectedTeamId(data[0].id)
           saveSelectedTeamId(data[0].id)
         }
+        setComposeTeamId(prev => prev ?? data[0].id)
       }
     } catch {}
   }
@@ -155,8 +158,8 @@ const App: React.FC = () => {
         body: JSON.stringify({
           content: composeText.trim(),
           url: normalizeUrl(currentUrl),
-          private: false,
-          teamId: activeTab === 'teams' ? selectedTeamId : null,
+          private: composeVisibility === 'private',
+          teamId: composeVisibility === 'team' ? composeTeamId : null,
         }),
       })
       if (!res.ok) throw new Error('Failed to post')
@@ -164,6 +167,7 @@ const App: React.FC = () => {
       // Attach user info (backend POST doesn't include relation)
       setRawNotes(prev => [{ ...created, user: auth.user }, ...prev])
       setComposeText('')
+      setComposeVisibility('public')
       setComposeOpen(false)
     } catch {}
     finally {
@@ -302,10 +306,39 @@ const App: React.FC = () => {
             placeholder="Write a note about this page…"
             autoFocus
           />
+          <div className="compose-visibility">
+            {(['public', 'private', 'team'] as const).map(v => (
+              <label key={v} className="compose-vis-label">
+                <input
+                  type="radio"
+                  name="compose-vis"
+                  value={v}
+                  checked={composeVisibility === v}
+                  onChange={() => setComposeVisibility(v)}
+                />
+                {v.charAt(0).toUpperCase() + v.slice(1)}
+              </label>
+            ))}
+            {composeVisibility === 'team' && (
+              teams.length > 0 ? (
+                <select
+                  className="team-select compose-team-select"
+                  value={composeTeamId ?? ''}
+                  onChange={e => setComposeTeamId(Number(e.target.value))}
+                >
+                  {teams.map(t => (
+                    <option key={t.id} value={t.id}>{t.name}</option>
+                  ))}
+                </select>
+              ) : (
+                <span className="compose-no-teams">You're not on any teams yet.</span>
+              )
+            )}
+          </div>
           <div className="compose-actions">
             <button
               className="btn btn-outline"
-              onClick={() => { setComposeOpen(false); setComposeText('') }}
+              onClick={() => { setComposeOpen(false); setComposeText(''); setComposeVisibility('public') }}
               disabled={posting}
             >
               Cancel

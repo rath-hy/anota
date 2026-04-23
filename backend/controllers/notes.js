@@ -1,14 +1,26 @@
 const router = require('express').Router()
+const jwt = require('jsonwebtoken')
 const { Note, User } = require('../models')
 const tokenExtractor = require('../middleware/tokenExtractor')
 const { sequelize } = require('../util/db')
 const { Op } = require('sequelize')
 const { normalizeUrl } = require('../util/urlNormalizer')
+const { SECRET } = require('../util/config')
 
 router.get('/', async (req, res) => {
   const includeOptions = {
     model: User,
     attributes: ['id', 'username', 'name']
+  }
+
+  // Optionally identify the requester without requiring auth
+  let requestingUserId = null
+  const authorization = req.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    try {
+      const decoded = jwt.verify(authorization.substring(7), SECRET)
+      requestingUserId = decoded.id
+    } catch {}
   }
 
   const where = {}
@@ -20,6 +32,9 @@ router.get('/', async (req, res) => {
   if (req.query.publicOnly === 'true') {
     where.private = false
     where.teamId = null  // team notes are not shown in the public feed
+  } else {
+    // Never expose another user's private notes
+    where[Op.or] = [{ private: false }, ...(requestingUserId ? [{ userId: requestingUserId }] : [])]
   }
 
   const notes = await Note.findAll({
